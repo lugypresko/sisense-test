@@ -1,0 +1,3 @@
+-r app/requirements.txt
+-r etl/requirements.txt
+pytest>=8.0

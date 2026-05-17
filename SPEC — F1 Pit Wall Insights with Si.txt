@@ -1,0 +1,695 @@
+SPEC — F1 Pit Wall Insights with Sisense
+1. מטרת הפרויקט
+
+לבנות prototype קצר שמדגים איך builder יכול לקחת דאטה פתוח של Formula 1, לעבד אותו במהירות בעזרת Python, ולהפוך אותו ל־embedded analytics experience בתוך אפליקציה — בעזרת Sisense.
+
+הפרויקט צריך להוכיח שלושה דברים:
+
+Hands-on build — יש קוד, דאטה, אפליקציה, גרפים ותובנות.
+Strategic thinking — יש קהל ברור: builders / vibe coders / sports-data hackers.
+Technical storytelling — יש סיפור פשוט:
+Vibe coding can create a dashboard. Sisense turns it into an embedded insight experience.
+
+המשימה של Sisense בנויה בדיוק על שלושת הצירים האלה: Strategy, Build, Story, עם משקל של 30% / 40% / 30%, והם מדגישים שדמו פשוט עם narrative חד עדיף על פרויקט מורכב מדי.
+
+2. שם הפרויקט
+F1 Pit Wall Insights
+
+כותרת משנה:
+
+Turn raw Formula 1 telemetry into an embedded strategy room with Sisense.
+
+מסר קצר:
+
+Vibe-code the app. Don’t vibe-code the analytics foundation.
+
+3. הקהל
+Primary Audience
+
+AI-native builders, vibe coders, technical founders, product engineers, and developer advocates who build apps quickly with tools like Cursor / Claude Code / Lovable / Replit — and want to add serious analytics without building a BI layer from scratch.
+
+Secondary Audience
+
+Sports-data fans / F1 technical communities who understand the value of telemetry, lap-time deltas, tyre degradation, and race strategy.
+
+4. הבעיה
+
+Vibe coding מאפשר לבנות UI ודשבורדים מהר.
+אבל כשצריך analytics אמיתי — מודל נתונים, פילטרים, השוואות, אמינות, גרפים מוטמעים, תובנות, שימוש חוזר — זה כבר לא רק “עוד chart”.
+
+ב־F1 זה מאוד ברור:
+
+אוהד רגיל רואה מי ניצח.
+אנליסט רוצה להבין:
+
+איפה נהג הרוויח זמן?
+איפה הוא איבד זמן?
+האם הצמיגים דעכו?
+האם ה־pit stop עזר?
+האם היה advantage בסקטור מסוים?
+מה היה ה־strategy signal?
+
+הסיפור:
+
+Formula 1 fans don’t need more charts.
+They need to understand where the race was won or lost.
+
+5. מקור הנתונים
+
+מקור הנתונים יהיה FastF1.
+
+FastF1 היא ספריית Python שמאפשרת גישה וניתוח של נתוני Formula 1 כמו timing data, telemetry, session results ועוד. היא מחזירה דאטה במבנים שמתאימים לעיבוד ב־Python / Pandas.
+
+גם בפרויקט F1 Race Replay מהסרטון, היוצר אומר שהמקור היחיד של הפרויקט הוא FastF1, והוא משתמש בה ל־driver info, session results ו־telemetry.
+
+6. Scope מומלץ
+
+לא לבנות מערכת גדולה.
+לבנות prototype שעובד על מירוץ אחד או session אחד.
+
+ברירת מחדל מומלצת
+Season: 2024 או 2025
+Race: Bahrain / Abu Dhabi / Monza / Silverstone
+Session: Race או Qualifying
+Drivers: 2–3 נהגים בלבד
+Focus: lap time, sector time, tyre stint, telemetry sample
+למה לא יותר?
+
+כי המטרה היא לא data science מלא.
+המטרה היא להראות איך builder הופך דאטה לחוויית analytics.
+
+7. הפיצ׳ר המרכזי
+F1 Strategy Room
+
+אפליקציה קטנה שמציגה:
+
+A. Race Overview
+
+כרטיסים עליונים:
+
+Selected race
+Selected drivers
+Total laps analyzed
+Fastest lap among selected drivers
+Average pace gap
+Tyre degradation signal
+B. Lap Time Trend
+
+גרף קווי:
+
+Lap number
+Lap time
+Driver
+
+שאלה שהגרף עונה עליה:
+
+מי היה עקבי יותר לאורך ה־stint?
+
+C. Driver Delta
+
+גרף שמראה פער בין שני נהגים לאורך ההקפות.
+
+שאלה:
+
+איפה הפער נפתח או נסגר?
+
+D. Tyre Stint / Degradation
+
+גרף:
+
+Lap number
+Lap time
+Tyre compound
+Tyre life
+
+שאלה:
+
+מתי הצמיג התחיל לאבד performance?
+
+E. Pit Wall Insights Panel
+
+כרטיסי insight בטקסט פשוט:
+
+Pace Insight
+Tyre Insight
+Strategy Moment
+Builder Note
+
+דוגמה:
+
+Norris gained most of his advantage between laps 14–19, while the medium tyre pace of the comparison driver started dropping after lap 17. This suggests the undercut window opened before the pit stop.
+
+גם אם התובנות מחושבות בצורה פשוטה — זה מספיק. העיקר להראות שאתה לא רק מציג גרף, אלא מסביר מה הוא אומר.
+
+8. ארכיטקטורה
+FastF1 API / Python package
+        ↓
+Python ETL script
+        ↓
+CSV files / optional PostgreSQL
+        ↓
+Sisense Trial data model OR local explicit data fallback
+        ↓
+React / Next.js app
+        ↓
+Sisense Compose SDK charts
+        ↓
+Insight panel + Builder README + content asset
+
+Sisense Compose SDK מאפשר לבנות analytics ו־data-driven experiences מתוך קוד, כולל queries, charts ו־filters, ללא תלות בדשבורדים מוכנים מראש. הוא תומך ב־React / Angular / Vue / TypeScript ומיועד לבנייה code-first של analytics בתוך מוצר.
+
+Compose SDK Charts יכולים לעבוד מול data source מתוך Sisense instance, וגם מול explicit data שמגיע מבחוץ במבנה טבלאי מתאים. זה חשוב כ־fallback אם סביבת ה־trial תעשה בעיות.
+
+9. Deliverables
+
+להגיש כ־GitHub repo.
+
+Repo structure
+f1-pit-wall-insights/
+  README.md
+  strategy-brief.md
+  content-asset.md
+  loom-script.md
+
+  /etl
+    extract_fastf1_data.py
+    transform_insights.py
+    requirements.txt
+
+  /data
+    raw/
+    processed/
+      laps.csv
+      stints.csv
+      driver_delta.csv
+      insights.json
+
+  /app
+    package.json
+    src/
+      App.tsx
+      main.tsx
+      components/
+        KpiCards.tsx
+        LapTimeTrend.tsx
+        DriverDeltaChart.tsx
+        TyreDegradationChart.tsx
+        PitWallInsights.tsx
+      data/
+        laps.json
+        stints.json
+        insights.json
+
+  /prompts
+    01-build-f1-analytics-app.md
+    02-add-sisense-compose-sdk.md
+    03-create-pit-wall-insights.md
+    04-turn-dashboard-into-builder-demo.md
+
+  /screenshots
+    strategy-room.png
+10. Implementation Plan
+Phase 1 — Data Extraction
+Goal
+
+להוציא דאטה מ־FastF1 ל־CSV.
+
+File
+/etl/extract_fastf1_data.py
+Install
+pip install fastf1 pandas numpy
+Script behavior
+
+הסקריפט יקבל:
+
+python extract_fastf1_data.py --year 2024 --race Bahrain --session R --drivers VER PER
+
+או hardcoded כדי לחסוך זמן.
+
+Data to extract
+laps.csv
+
+Columns:
+
+season
+race
+session
+driver
+lap_number
+lap_time_seconds
+sector1_seconds
+sector2_seconds
+sector3_seconds
+compound
+tyre_life
+stint
+pit_in_time
+pit_out_time
+is_accurate
+driver_delta.csv
+
+Columns:
+
+lap_number
+driver_a
+driver_b
+driver_a_lap_time
+driver_b_lap_time
+delta_seconds
+cumulative_delta
+telemetry_sample.csv — optional
+
+רק אם מספיקים.
+
+Columns:
+
+driver
+lap_number
+distance
+speed
+throttle
+brake
+gear
+drs
+weather.csv — optional
+
+Columns:
+
+time
+air_temp
+track_temp
+humidity
+rainfall
+wind_speed
+11. Insight Logic
+
+לא צריך ML.
+צריך rules פשוטים שמייצרים תובנות הגיוניות.
+
+File
+/etl/transform_insights.py
+Insight 1 — Pace Advantage
+
+Logic:
+
+חשב average lap time לכל נהג בטווח ההקפות.
+מצא מי מהיר יותר.
+חשב gap ממוצע.
+
+Output:
+
+{
+  "title": "Pace Advantage",
+  "insight": "VER was on average 0.42s faster per lap than PER across the selected stint.",
+  "why_it_matters": "A consistent pace gap over multiple laps usually matters more than a single fastest lap."
+}
+Insight 2 — Tyre Degradation
+
+Logic:
+
+לכל stint, חשב rolling average של lap time.
+השווה תחילת stint לסוף stint.
+אם lap time עולה ביותר מ־X שניות — סמן degradation.
+
+Output:
+
+{
+  "title": "Tyre Degradation Signal",
+  "insight": "Lap times started increasing after lap 17, suggesting the tyre performance window was closing.",
+  "why_it_matters": "This can indicate the optimal pit window before pace drops too much."
+}
+Insight 3 — Strategy Moment
+
+Logic:
+
+מצא lap שבו delta השתנה הכי הרבה.
+סמן אותו כ־race turning point.
+
+Output:
+
+{
+  "title": "Strategy Moment",
+  "insight": "The largest delta shift happened around lap 21, which may indicate traffic, tyre drop-off, or pit strategy impact.",
+  "why_it_matters": "This is where a race engineer would look first."
+}
+Insight 4 — Builder Note
+
+Output קבוע:
+
+{
+  "title": "Builder Note",
+  "insight": "The key lesson is not the chart itself. It is how raw telemetry becomes an embedded decision experience.",
+  "why_it_matters": "This is the role Sisense can play for AI-native builders."
+}
+12. Sisense Integration Plan
+Primary path — Use Sisense Trial
+הירשם ל־Sisense Trial.
+העלה את laps.csv, driver_delta.csv, stints.csv.
+בנה data model פשוט.
+חבר את React app ל־Sisense באמצעות Compose SDK.
+השתמש ב־Compose SDK charts כדי להציג:
+Lap Time Trend
+Driver Delta
+Tyre Degradation
+KPI Cards
+
+Compose SDK מיועד בדיוק לבנייה של charts, filters ו־queries מתוך אפליקציית client.
+
+Fallback path — Explicit Data
+
+אם ה־trial / data model / auth גוזלים יותר מדי זמן:
+
+שמור את הנתונים כ־JSON בתוך האפליקציה.
+השתמש ב־Compose SDK charts עם explicit data.
+תכתוב ב־README:
+
+The prototype supports two paths: Sisense Trial data model as the primary path, and explicit local data as a fallback to demonstrate the same embedded analytics experience without spending assignment time on environment setup.
+
+זה לגיטימי כי הבריף עצמו אומר לא להיתקע על setup, ואם נתקעים ב־trial אפשר לפנות אליהם או להתמקד בבנייה.
+
+13. UI Spec
+Screen Title
+F1 Pit Wall Insights
+Subtitle
+An embedded analytics experience for builders who want to turn raw telemetry into race strategy insights.
+Layout
+ ------------------------------------------------------
+| F1 Pit Wall Insights                                  |
+| Race: Bahrain GP 2024 | Drivers: VER vs PER           |
+ ------------------------------------------------------
+| KPI 1         | KPI 2          | KPI 3        | KPI 4  |
+| Fastest Lap   | Avg Gap        | Stint Drop   | TurnPt |
+ ------------------------------------------------------
+| Lap Time Trend Chart                                  |
+ ------------------------------------------------------
+| Driver Delta Chart        | Tyre Degradation Chart     |
+ ------------------------------------------------------
+| Pit Wall Insights Panel                              |
+| - Pace Advantage                                      |
+| - Tyre Degradation Signal                            |
+| - Strategy Moment                                    |
+| - Builder Note                                       |
+ ------------------------------------------------------
+Design
+Dark theme
+Clean “race control / pit wall” feel
+Minimal UI
+No heavy branding
+Focus on insight readability
+14. README Structure
+README.md
+# F1 Pit Wall Insights with Sisense
+
+Vibe coding makes it easy to generate dashboards.
+But serious analytics needs structure, trust, and context.
+
+This prototype shows how a builder can take raw Formula 1 telemetry, process it with Python, and turn it into an embedded analytics experience using Sisense.
+
+## Why this matters
+
+F1 fans don't need more charts.
+They need to understand where the race was won or lost.
+
+For builders, this demo shows a broader point:
+Sisense can become the analytics layer inside AI-built products.
+
+## What it does
+
+- Extracts F1 timing and telemetry data using FastF1
+- Transforms lap, stint, tyre, and delta data into analytics-ready tables
+- Displays embedded analytics charts in a React app
+- Generates plain-English pit wall insights
+- Includes prompts for AI-native builders to recreate or extend the experience
+
+## The builder story
+
+Vibe-code the product experience.
+Use Sisense as the analytics foundation.
+
+## How to run
+
+### 1. Extract data
+
+```bash
+cd etl
+pip install -r requirements.txt
+python extract_fastf1_data.py
+python transform_insights.py
+2. Run the app
+cd app
+npm install
+npm run dev
+3. Optional Sisense Trial path
+
+Upload the processed CSV files into Sisense Trial and connect the Compose SDK components to your Sisense data model.
+
+Files
+/etl — FastF1 data extraction and transformation
+/data — processed analytics data
+/app — React embedded analytics app
+/prompts — Cursor / Claude Code builder prompts
+strategy-brief.md — audience, distribution, CTA
+content-asset.md — technical storytelling asset
+
+---
+
+# 15. Strategy Brief
+
+## strategy-brief.md
+
+```md
+# Strategy Brief — F1 Pit Wall Insights
+
+## Audience
+
+AI-native builders, vibe coders, product engineers, and technical founders who are building apps quickly with AI coding tools and want to add serious analytics without building a BI layer from scratch.
+
+## Pain Point
+
+Vibe coding can generate product UI and simple dashboards quickly. But analytics becomes harder when the experience needs to be trusted, reusable, embedded, filtered, and explainable.
+
+Formula 1 is a strong demo domain because the data is emotional, time-based, and rich. A chart is not enough. The user wants to understand where time was gained or lost.
+
+## Prototype
+
+F1 Pit Wall Insights turns raw Formula 1 telemetry into an embedded analytics experience. It extracts session data with FastF1, transforms it into analytics-ready tables, and displays lap-time trends, driver delta, tyre degradation, and plain-English strategy insights.
+
+## Why Sisense
+
+Sisense can become the analytics layer for AI-native builders. Instead of building charts, queries, filters, and insight logic from scratch, builders can embed analytics into the product experience.
+
+## Distribution
+
+- Formula 1 technical communities
+- Sports data communities
+- Cursor / Claude Code builder communities
+- Dev.to
+- LinkedIn technical builders
+- Indie Hacker / AI SaaS founder communities
+- Product engineering communities
+
+## CTA
+
+Clone the repo.
+Run the data pipeline.
+Connect a Sisense trial.
+Turn raw telemetry into an embedded analytics experience.
+16. Content Asset
+content-asset.md
+
+Title:
+
+I built an F1 Pit Wall with Sisense — because charts are not insights
+
+Body:
+
+Vibe coding can generate a dashboard fast.
+
+But Formula 1 data exposes the real problem:
+a chart can show lap times, but it does not explain where the race was won or lost.
+
+So I built a small prototype:
+F1 Pit Wall Insights.
+
+It takes raw F1 telemetry, processes it with Python, and turns it into an embedded analytics experience using Sisense.
+
+The app shows:
+
+- lap time trends
+- driver delta
+- tyre degradation signals
+- strategy moments
+- plain-English pit wall insights
+
+The goal was not to build another F1 dashboard.
+
+The goal was to show how AI-native builders can move from generated visualizations to trusted embedded analytics.
+
+That is where Sisense becomes interesting.
+
+Vibe-code the product experience.
+Use Sisense as the analytics foundation.
+17. Loom Script — עד 3 דקות
+0:00–0:20 — Hook
+
+“Vibe coding makes it easy to generate dashboards. But in Formula 1, a dashboard is not enough. Fans don’t just want to see lap times — they want to understand where the race was won or lost.”
+
+0:20–0:50 — What I built
+
+“I built F1 Pit Wall Insights: a small embedded analytics prototype using FastF1 data, Python processing, and a Sisense-style analytics experience.”
+
+0:50–1:40 — Demo
+
+“Here we can see lap-time trends, driver delta, tyre degradation signals, and a Pit Wall Insights panel that explains the main strategy signals in plain English.”
+
+1:40–2:20 — Behind the scenes
+
+“The data is extracted with FastF1, transformed into analytics-ready tables, and then displayed inside a product-like React app. The point is to show how a builder can move from raw data to embedded analytics quickly.”
+
+2:20–2:50 — Sisense story
+
+“The important part is not Formula 1. The important part is the builder pattern: take a rich data source, turn it into reusable analytics, and embed it into a product experience.”
+
+2:50–3:00 — CTA
+
+“Clone the repo, run the pipeline, connect Sisense, and build your own embedded analytics experience.”
+
+18. Codex / Cursor Execution Prompt
+
+תן את זה ל־Codex:
+
+You are building a take-home prototype called "F1 Pit Wall Insights with Sisense".
+
+Goal:
+Create a small builder-friendly prototype that turns Formula 1 data into an embedded analytics experience.
+
+Do not over-engineer. Build a clean working demo.
+
+Architecture:
+- Python ETL using FastF1 to extract F1 lap/session data
+- Process data into CSV/JSON files
+- React app displaying embedded analytics-style charts
+- Pit Wall Insights panel with plain-English insights
+- README, strategy brief, and content asset
+
+Data:
+Use FastF1 to load one race/session and 2 drivers.
+Extract:
+- lap number
+- driver
+- lap time in seconds
+- sector times
+- compound
+- tyre life
+- stint
+- pit in/out if available
+
+Generate:
+- laps.csv
+- driver_delta.csv
+- stints.csv
+- insights.json
+
+App:
+Build a React + Vite + TypeScript app.
+Create these components:
+- KpiCards
+- LapTimeTrend
+- DriverDeltaChart
+- TyreDegradationChart
+- PitWallInsights
+
+Use clean dark UI inspired by F1 pit wall / race control.
+Use a simple charting library if needed for the local demo.
+Structure the app so Sisense Compose SDK charts can replace the local chart components later.
+Add comments where Sisense Compose SDK integration would connect to the data model.
+
+Story:
+README must explain:
+- This is not just an F1 dashboard
+- It shows how builders can turn raw telemetry into embedded analytics
+- Sisense can become the analytics layer for AI-native builders
+- Include setup instructions
+- Include optional Sisense Trial integration path
+
+Keep the implementation simple and complete.
+19. Acceptance Criteria
+Must Have
+GitHub repo מסודר.
+README ברור.
+Python ETL שרץ או לפחות ברור איך להריץ.
+Processed data committed ל־repo כדי שהדמו יעבוד גם בלי להריץ FastF1.
+React app שרצה לוקאלית.
+לפחות 3 גרפים / visual sections.
+Pit Wall Insights panel עם תובנות.
+strategy brief.
+content asset.
+Loom script או וידאו.
+Nice to Have
+חיבור אמיתי ל־Sisense Trial.
+Compose SDK chart אחד לפחות.
+Prompt pack ל־Cursor.
+MCP demo קצר: “Ask Sisense what data exists” — רק אם זה לא שורף זמן.
+Do Not Do
+לא לבנות F1 replay מלא.
+לא להתעסק עם מפת מסלול.
+לא לנסות live telemetry.
+לא לבנות AI chatbot כללי.
+לא להיכנס ל־data science כבד.
+לא להפוך את זה לפרויקט של שבועיים.
+20. Prompt Pack
+/prompts/01-build-f1-analytics-app.md
+Build a small React analytics app called F1 Pit Wall Insights.
+
+Use the provided laps.json, driver_delta.json, and insights.json files.
+
+Create:
+- KPI cards
+- lap time trend chart
+- driver delta chart
+- tyre degradation chart
+- insight cards
+
+Use a dark race-control style.
+Keep the code simple and easy for another builder to understand.
+/prompts/02-add-sisense-compose-sdk.md
+Replace the local chart components with Sisense Compose SDK chart components.
+
+Assume the Sisense data model includes:
+- laps
+- driver_delta
+- stints
+
+Create Compose SDK charts for:
+- lap time trend by driver
+- delta over lap number
+- tyre degradation by stint
+
+Keep the local JSON fallback available.
+/prompts/03-create-pit-wall-insights.md
+Generate plain-English F1 strategy insights from the processed lap data.
+
+Focus on:
+- average pace advantage
+- largest delta shift
+- tyre degradation signal
+- likely strategy moment
+
+Return JSON with:
+- title
+- insight
+- why_it_matters
+/prompts/04-turn-dashboard-into-builder-demo.md
+Rewrite the README and content asset so this is positioned as a builder demo, not an F1 dashboard.
+
+Core message:
+Vibe coding can generate dashboards.
+Sisense can help builders turn raw data into trusted embedded analytics experiences.
+21. שורת הסיפור שצריכה להופיע בכל מקום
+Vibe coding can generate dashboards.
+Sisense helps builders turn them into trusted embedded analytics experiences.
+
+או יותר חד:
+
+The chart is not the product.
+The insight experience is the product.

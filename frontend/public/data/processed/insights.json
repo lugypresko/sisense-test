@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Pace Advantage",
+    "summary": "VER averaged 0.72s per lap faster than PER across this run.",
+    "evidence_laps": [14, 15, 16, 17, 18, 19],
+    "why_it_matters": "The gap is sustained over a multi-lap window, not just one outlier lap."
+  },
+  {
+    "title": "Tyre Degradation Signal",
+    "summary": "PER's pace degradation steepens after lap 17 and peaks by lap 19.",
+    "evidence_laps": [17, 18, 19, 20, 21],
+    "why_it_matters": "This suggests the tyre window closes earlier and pressure shifts toward a stop decision."
+  },
+  {
+    "title": "Strategy Moment",
+    "summary": "The largest single-lap delta jump appears on lap 19.",
+    "evidence_laps": [19],
+    "why_it_matters": "Lap 19 is the first lap to inspect for traffic, tyre drop-off, or pit strategy impact."
+  },
+  {
+    "title": "Builder Note",
+    "summary": "From raw F1 telemetry to a pit-wall decision dashboard builders can run locally and later connect to Sisense.",
+    "evidence_laps": [14, 15, 16, 17, 18, 19],
+    "why_it_matters": "The value is the decision-ready analytics story, not isolated charts."
+  }
+]

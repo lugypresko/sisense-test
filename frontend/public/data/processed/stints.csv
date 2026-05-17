@@ -1,0 +1,3 @@
+driver,stint,compound,start_lap,end_lap,start_avg_seconds,end_avg_seconds,drop_seconds
+VER,1,MEDIUM,10,21,92.983,93.547,0.564
+PER,1,MEDIUM,10,21,93.263,95.113,1.850
