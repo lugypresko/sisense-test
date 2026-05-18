@@ -35,7 +35,9 @@ This script is designed for a 3-minute video pitch/walkthrough for the Sisense B
 > 2. **Driver Delta**: Showing exactly on which lap the gap opened up.
 > 3. **Tyre Degradation**: Identifying the exact point where tyre performance dropped off.
 > 
-> And finally, the **Pit Wall Insights Panel**: this automatically analyzes the telemetry to deliver plain-English strategic conclusions.
+> And finally, the **Pit Wall AI Co-Pilot**: an interactive telemetry console simulating GP, Max Verstappen's race engineer. 
+> 
+> Instead of a static dashboard, developers can type freeform tactical questions or click presets like Tyre Wear, Stint Strategy, or the Race Turning Point to "talk to the data" and receive mathematically sound telemetry analyses in real-time.
 > 
 > We are running in **Local Mode** right now, rendering local data immediately using Recharts."
 
@@ -47,11 +49,11 @@ This script is designed for a 3-minute video pitch/walkthrough for the Sisense B
 > 
 > Vibe coding is great for prototyping the UI. But building a governed, filterable, scalable analytics layer from scratch is painful.
 > 
-> When we toggle **Sisense Mode**, we wrap our components in the `SisenseContextProvider` and connect directly to a Sisense instance using environment variables.
+> To help developers build their own cube, I placed clean F1 telemetry CSVs in the repository root to upload to Sisense and build an ElastiCube in minutes.
 > 
-> At the bottom, we see a **Sisense Compose SDK Proof Point**. This is not an iframe. It is a native React component (`SisenseLapTimeChart`) rendered directly from our Sisense data model using `@sisense/sdk-ui`.
+> When we toggle **Sisense Mode**, we wrap our components in the `SisenseContextProvider` and render a native React component (`SisenseLapTimeChart`) directly from our Sisense data model using `@sisense/sdk-ui`.
 > 
-> And if the developer's credentials aren't set up yet, the component **fails gracefully** with a clean error boundary and clear developer instructions, keeping the rest of the application fully functional."
+> And if the trial's AWS S3 permissions are blocked or credentials aren't configured yet, the component **fails gracefully** with a clean error boundary and clear developer fallback instructions, keeping the rest of the application fully functional."
 
 ---
 
