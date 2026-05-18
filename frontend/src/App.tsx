@@ -11,7 +11,8 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { createAdapter } from "./data/createAdapter";
+import { createAnalyticsProvider, getAnalyticsMode, SisenseModeBoundary } from "./analytics/AnalyticsMode";
+import { SisenseLapTimeChart } from "./components/sisense/SisenseLapTimeChart";
 import type { DashboardData } from "./types";
 
 function toNum(value: unknown): number {
@@ -22,14 +23,15 @@ function toNum(value: unknown): number {
 export function App() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string>("");
-  const adapter = useMemo(() => createAdapter(), []);
+  const mode = getAnalyticsMode();
+  const provider = useMemo(() => createAnalyticsProvider(), []);
 
   useEffect(() => {
-    adapter
+    provider
       .loadDashboardData()
       .then(setData)
       .catch((err) => setError(err instanceof Error ? err.message : String(err)));
-  }, [adapter]);
+  }, [provider]);
 
   if (error) return <main className="page"><p className="error">{error}</p></main>;
   if (!data) return <main className="page"><p>Loading dashboard...</p></main>;
@@ -39,6 +41,14 @@ export function App() {
       <header className="header">
         <h1>F1 Pit Wall Insights</h1>
         <p>Where VER created the gap over PER</p>
+        <div className="modeBadges">
+          <span className={mode === "local" ? "badge active" : "badge"}>
+            Local Mode: FastF1 processed data to React charts
+          </span>
+          <span className={mode === "sisense" ? "badge active" : "badge"}>
+            Sisense Mode: FastF1 CSV to Sisense model to Compose SDK
+          </span>
+        </div>
       </header>
       <section className="kpiGrid">
         <article className="kpi"><h2>Fastest Lap</h2><p>{data.kpis.fastestLap.seconds.toFixed(2)}s</p><small>{data.kpis.fastestLap.driver} lap {data.kpis.fastestLap.lap}</small></article>
@@ -103,6 +113,16 @@ export function App() {
           ))}
         </div>
       </section>
+      {mode === "sisense" && (
+        <section className="panel">
+          <h2>Sisense Compose Proof Point</h2>
+          <SisenseModeBoundary>
+            <div className="chart">
+              <SisenseLapTimeChart />
+            </div>
+          </SisenseModeBoundary>
+        </section>
+      )}
     </main>
   );
 }
