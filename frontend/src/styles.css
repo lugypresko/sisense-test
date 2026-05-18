@@ -32,3 +32,189 @@ body { margin: 0; background: radial-gradient(circle at top, #111827, #0b0f14 55
   .split { grid-template-columns: 1fr; }
   .insights { grid-template-columns: 1fr; }
 }
+
+/* AI Co-Pilot Chat System */
+.insightsSection {
+  align-items: stretch;
+}
+.staticInsights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.insightsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  flex-grow: 1;
+}
+.aiCopilot {
+  border: 1px solid #22d3ee;
+  border-radius: 8px;
+  background: #090d12;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+}
+.aiCopilotHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1f2937;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+.aiCopilotHeader h2 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  color: #22d3ee;
+}
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+}
+.pulseCircle {
+  width: 8px;
+  height: 8px;
+  background-color: #22d3ee;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 1.6s infinite ease-in-out;
+}
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 8px #22d3ee; }
+  100% { transform: scale(0.9); opacity: 0.6; }
+}
+.chatHistory {
+  flex-grow: 1;
+  height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+  margin-bottom: 10px;
+}
+.chatBubble {
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  max-width: 90%;
+}
+.chatBubble.system {
+  background: rgba(31, 41, 55, 0.4);
+  border: 1px dashed #374151;
+  color: #9ca3af;
+  align-self: center;
+  text-align: center;
+  max-width: 100%;
+}
+.chatBubble.user {
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #f3f4f6;
+  align-self: flex-end;
+}
+.chatBubble.ai {
+  background: rgba(9, 21, 30, 0.85);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: #e5e7eb;
+  align-self: flex-start;
+}
+.senderName {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+.chatBubble.ai .senderName {
+  color: #22d3ee;
+}
+.messageText strong {
+  color: #22d3ee;
+}
+.quickPrompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.promptBtn {
+  background: #111827;
+  border: 1px solid #1f2937;
+  color: #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.promptBtn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: #22d3ee;
+  color: #e0f2fe;
+}
+.chatInputArea {
+  display: flex;
+  gap: 8px;
+}
+.chatInput {
+  flex-grow: 1;
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #f3f4f6;
+  font-size: 12px;
+  outline: none;
+}
+.chatInput:focus {
+  border-color: #22d3ee;
+  box-shadow: 0 0 5px rgba(34, 211, 238, 0.25);
+}
+.chatSendBtn {
+  background: #22d3ee;
+  color: #0b0f14;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.chatSendBtn:hover {
+  background: #06b6d4;
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+}
+.typingIndicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  height: 12px;
+  margin-top: 4px;
+}
+.typingIndicator span {
+  width: 5px;
+  height: 5px;
+  background: #22d3ee;
+  border-radius: 50%;
+  animation: typing 1s infinite ease-in-out;
+}
+.typingIndicator span:nth-child(2) { animation-delay: 0.2s; }
+.typingIndicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}

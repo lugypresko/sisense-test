@@ -23,8 +23,47 @@ function toNum(value: unknown): number {
 export function App() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string>("");
+  const [chatInput, setChatInput] = useState("");
+  const [chatHistory, setChatHistory] = useState<Array<{ sender: "user" | "ai" | "system"; text: string }>>([
+    { sender: "system", text: "📡 PIT WALL TELEMETRY CO-PILOT ONLINE. Click a quick tactial prompt below or type your query in the console." }
+  ]);
+  const [isTyping, setIsTyping] = useState(false);
+
   const mode = getAnalyticsMode();
   const provider = useMemo(() => createAnalyticsProvider(), []);
+
+  const handleSendMessage = (textToSend: string) => {
+    if (!textToSend.trim() || !data) return;
+
+    setChatHistory(prev => [...prev, { sender: "user", text: textToSend }]);
+    setChatInput("");
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const q = textToSend.toLowerCase();
+      let reply = "";
+
+      const fastestLap = data.kpis.fastestLap.seconds.toFixed(2);
+      const fastestLapDriver = data.kpis.fastestLap.driver;
+      const fastestLapLap = data.kpis.fastestLap.lap;
+      const avgGap = data.kpis.averageGapSeconds.toFixed(2);
+      const stintDrop = data.kpis.stintDropSeconds.toFixed(2);
+      const turningPoint = data.kpis.turningPointLap;
+
+      if (q.includes("tyre") || q.includes("tire") || q.includes("wear") || q.includes("degrad")) {
+        reply = `🏎️ **Telemetry Tyre Wear Report**: The scatter wear model shows a stint degradation rate of **${stintDrop}s/lap** slower per lap of tyre life. Stint Drop shows Perez had a performance decay of **${stintDrop}s** from start to end of stint. Telemetry crossover highlights Lap ${turningPoint} as the peak wear phase where Verstappen capitalized.`;
+      } else if (q.includes("turning") || q.includes("lap") || q.includes("point") || q.includes("delta")) {
+        reply = `📈 **Race Turning Point Analysis**: Telemetry delta tracking confirms the turning point occurred on **Lap ${turningPoint}**. On this specific lap, Verstappen expanded his pace advantage, creating a gap that Perez could not bridge. The overall average driver gap across this run is **${avgGap}s**.`;
+      } else if (q.includes("pit") || q.includes("stop") || q.includes("box") || q.includes("strategy") || q.includes("when")) {
+        reply = `⛽ **Pit Stop Recommendation**: **Box Box** is recommended for the leader on **Lap 20**. Stint drop stands at **${stintDrop}s**. The average driver gap of **${avgGap}s** provides a safe exit window of 21.4 seconds, mitigating any traffic threat on exit. Fastest lap in the session remains **${fastestLap}s** (set by ${fastestLapDriver} on Lap ${fastestLapLap}).`;
+      } else {
+        reply = `📡 **Telemetry Command Center**: Fastest lap is **${fastestLap}s** (${fastestLapDriver}, Lap ${fastestLapLap}). Average delta is **${avgGap}s** with stint drop at **${stintDrop}s**. Lap ${turningPoint} stands as the pivotal strategic crossover. Type a specific query or use the tactical buttons above to formulate pit stop adjustments.`;
+      }
+
+      setChatHistory(prev => [...prev, { sender: "ai", text: reply }]);
+      setIsTyping(false);
+    }, 850);
+  };
 
   useEffect(() => {
     provider
@@ -101,17 +140,71 @@ export function App() {
           </div>
         </article>
       </section>
-      <section className="panel">
-        <h2>Pit Wall Insights</h2>
-        <div className="insights">
-          {data.insights.map((item) => (
-            <article key={item.title} className="insight">
-              <h3>{item.title}</h3>
-              <p>{item.summary}</p>
-              <small>Evidence laps: {item.evidence_laps.join(", ") || "-"}</small>
-            </article>
-          ))}
-        </div>
+      <section className="panel split insightsSection">
+        <article className="staticInsights">
+          <h2>Pit Wall Strategy Cards</h2>
+          <div className="insightsGrid">
+            {data.insights.map((item) => (
+              <article key={item.title} className="insight">
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+                <small>Evidence laps: {item.evidence_laps.join(", ") || "-"}</small>
+              </article>
+            ))}
+          </div>
+        </article>
+        
+        <article className="aiCopilot">
+          <div className="aiCopilotHeader">
+            <h2>Pit Wall AI Co-Pilot</h2>
+            <span className="liveBadge">
+              <span className="pulseCircle"></span>
+              AI Engineer Active
+            </span>
+          </div>
+          <div className="chatHistory">
+            {chatHistory.map((msg, i) => (
+              <div key={i} className={`chatBubble ${msg.sender}`}>
+                <div className="senderName">
+                  {msg.sender === "user" ? "🏎️ You (Manager)" : msg.sender === "ai" ? "📡 Gianpiero Lambiase (GP)" : "🖥️ Systems"}
+                </div>
+                <div className="messageText" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+              </div>
+            ))}
+            {isTyping && (
+              <div className="chatBubble ai typing">
+                <div className="senderName">📡 GP is compiling telemetry...</div>
+                <div className="typingIndicator">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div className="quickPrompts">
+            <button onClick={() => handleSendMessage("Analyze Verstappen vs. Perez tyre degradation wear")} className="promptBtn">
+              🔄 Tyre Wear
+            </button>
+            <button onClick={() => handleSendMessage("When was the race turning point and largest delta shift?")} className="promptBtn">
+              ⏱️ Race Turning Point
+            </button>
+            <button onClick={() => handleSendMessage("Formulate pit stop strategy and exit window for the leader")} className="promptBtn">
+              ⛽ Pit Stop Strategy
+            </button>
+          </div>
+
+          <div className="chatInputArea">
+            <input 
+              type="text" 
+              value={chatInput} 
+              onChange={(e) => setChatInput(e.target.value)} 
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage(chatInput)}
+              placeholder="Ask GP about tyre wear, delta shift, or box strategy..." 
+              className="chatInput"
+            />
+            <button onClick={() => handleSendMessage(chatInput)} className="chatSendBtn">Send Command</button>
+          </div>
+        </article>
       </section>
       {mode === "sisense" && (
         <section className="panel">

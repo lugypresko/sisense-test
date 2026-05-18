@@ -1,6 +1,6 @@
 {
   "name": "f1-pit-wall-frontend",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,11 +12,13 @@
     "@sisense/sdk-cli": "^2.8.0",
     "@sisense/sdk-data": "^2.8.0",
     "@sisense/sdk-ui": "^2.8.0",
+    "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^2.12.7"
   },
   "devDependencies": {
+    "@types/papaparse": "^5.3.16",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
