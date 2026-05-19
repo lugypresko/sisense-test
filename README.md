@@ -1,466 +1,764 @@
 # F1 Pit Wall Insights
 
-**Prototype analytics fast. Keep the UI product-native. Grow into Sisense-powered embedded analytics.**
+**Analytics for product builders. Not dashboards for BI teams.**
 
-![F1 Pit Wall Insights — From local analytics prototype to Sisense-powered embedded analytics](docs/screenshots/f1-pit-wall-hero.png)
+> Prototype analytics locally. Keep your UI product-native. Grow into Sisense-powered embedded analytics — **without rebuilding anything.**
 
 <p align="center">
-  <a href="https://frontend-two-tau-54.vercel.app"><strong>Live Demo</strong></a> ·
-  <a href="https://github.com/lugypresko/sisense-test/tree/feature/compose-sdk-mode"><strong>GitHub Repo</strong></a> ·
-  <a href="https://notebooklm.google.com/notebook/b7b9326b-3728-4bc0-9502-e5f505da2b52/artifact/e5cbe26e-cbcd-4fc2-b756-db9857be4e29?"><strong>Explainer</strong></a>
+  <a href="https://frontend-two-tau-54.vercel.app"><strong>🚀 Live Demo</strong></a> ·
+  <a href="https://github.com/lugypresko/sisense-test"><strong>⭐ GitHub</strong></a> ·
+  <a href="https://notebooklm.google.com/notebook/b7b9326b-3728-4bc0-9502-e5f505da2b52"><strong>📖 Explainer</strong></a>
 </p>
 
 ---
 
-## Start Here
+## 📸 See It Working
 
-The top-of-funnel CTA is **not**:
+![F1 Pit Wall Dashboard - VER vs PER comparison showing lap trends, tyre degradation, and pit-wall strategy insights](docs/screenshots/f1-pit-wall-hero.png)
 
-> Sign up for Sisense.
-
-It is:
-
-> **Fork this repo. Add analytics to your React app in under 10 minutes.**
-
-This prototype is the acquisition channel.
-
-It is live, forkable, and designed around a real developer workflow:
-
-```text
-local prototype → product-native analytics UI → Sisense-powered embedded analytics
-```
-
-The first value moment requires **no signup, no token, and no platform setup**.
-
-Run it locally, see the dashboard working, then connect Sisense Compose SDK when you are ready for governed embedded analytics.
+**What you're seeing:**
+- Real F1 telemetry analytics
+- Live driver comparison (Verstappen vs Pérez)
+- Lap timing trends, tyre degradation, strategy cards
+- Built in React. Powered by processed data.
+- **No Sisense account. No setup. No BS.**
 
 ---
 
-## The Idea
-
-Modern builders do not start inside a BI platform.
-
-They start with a product idea.
-They vibe-code a prototype.
-They test the experience locally.
-They shape the UI around the real user workflow.
-Only then do they connect the product to governed analytics infrastructure.
-
-**F1 Pit Wall Insights** demonstrates that journey.
-
-It starts as a local React analytics app powered by processed Formula 1 telemetry data, then shows how the same product-native experience can evolve into embedded analytics with **Sisense Compose SDK**.
-
-In short:
-
-> AI helps builders create dashboards faster.  
-> Sisense helps builders turn those dashboards into analytics products.
-
----
-
-## Fork & Run in Under 10 Minutes
+## ⚡ Get Started in 90 Seconds
 
 ```bash
+# 1. Clone
 git clone https://github.com/lugypresko/sisense-test.git
 cd sisense-test/frontend
+
+# 2. Install
 npm install
+
+# 3. Run
+npm run dev
+
+# 4. Open browser
+# http://localhost:5173
+```
+
+**That's it.** You now have a working analytics dashboard.
+
+✅ **Local data** — no server setup  
+✅ **Real charts** — not mockups  
+✅ **Product-native UI** — not an iframe  
+✅ **Your code** — fully editable  
+
+---
+
+## 🎯 What This Is (And What It's Not)
+
+### This IS:
+- A real React analytics app you can fork and customize
+- A walkthrough of the modern builder journey (prototype → product → platform)
+- A proof that you don't need BI tools to start building analytics features
+- A bridge from local prototyping to production-grade embedded analytics
+
+### This is NOT:
+- Another Sisense feature demo
+- A BI dashboard in an iframe
+- Enterprise software you need to configure for hours
+- "Yet another analytics template"
+
+---
+
+## 🚦 Which Path Are You Taking?
+
+### Path 1: Just Want to See It Work? ✨
+**You're done.** Run the 3 commands above, open the dashboard, explore. Takes 2 minutes.
+
+---
+
+### Path 2: Fork & Customize It 🔧
+You have a product idea. You want analytics inside it. This repo shows how.
+
+**Good first forks:**
+- Replace F1 with your domain (SaaS metrics, sports, supply chain, whatever)
+- Add another race dataset or driver comparison
+- Customize the UI to match your product
+- Extend with more KPI cards or visualizations
+- Deploy to Vercel (one-click)
+
+**Start here:** [Customize Guide](#customization)
+
+---
+
+### Path 3: Connect Real Data (Sisense) 📊
+Your prototype works. Now you want:
+- ✅ Real data governance
+- ✅ Reusable analytics components
+- ✅ Production-grade data modeling
+- ✅ Sisense Studio integration
+
+**Go here:** [Add Sisense in 5 Minutes](#add-sisense)
+
+---
+
+## 🏗️ How This Works (The Strategy)
+
+You've probably been told:
+
+> "Start inside the BI platform. Design in Sisense Studio. Everything will work."
+
+**But actual developers:**
+
+1. Start with a **product idea** (not a platform)
+2. **Vibe-code** a prototype in their stack
+3. **Test locally** to validate the experience
+4. **Shape the UI** around the real workflow
+5. **Only then** add governance + platform infrastructure
+
+This repo shows that exact journey.
+
+```
+Idea → Local Prototype → Validate UX → Add Sisense → Ship
+```
+
+The key insight:
+
+> **You don't need Sisense to prove the dashboard works.  
+> You need Sisense to make it scale, govern it, and keep it maintainable.**
+
+This repo proves step 1-4 work great without Sisense.  
+Then step 5 shows how Sisense fits naturally.
+
+---
+
+## 📖 Project Structure
+
+```
+frontend/
+├── src/
+│   ├── analytics/
+│   │   ├── providers/
+│   │   │   ├── local.ts          ← Local data provider
+│   │   │   └── sisense.ts        ← Sisense Compose SDK
+│   │   └── hooks/
+│   ├── components/
+│   │   ├── DashboardHome.tsx     ← Main dashboard
+│   │   ├── ComparisonView.tsx    ← Driver comparison
+│   │   └── sisense/
+│   │       └── SisenseLapChart.tsx ← Sisense component example
+│   ├── data/
+│   │   └── f1-telemetry.json     ← Processed F1 data
+│   └── App.tsx
+├── .env.local                     ← Configuration (see setup below)
+├── vite.config.ts
+└── package.json
+
+sisense/
+├── f1-data-model.ts              ← Generated data model
+└── setup-guide.md
+
+docs/
+├── screenshots/
+└── architecture.md
+```
+
+**Key design:** Analytics provider boundary at `src/analytics/providers/`.
+
+The dashboard doesn't care if data comes from local files or Sisense.  
+That keeps iteration fast while preserving a clean upgrade path.
+
+---
+
+## 🚀 Run Modes Explained
+
+### Local Mode (Default)
+
+This is how the repo works out of the box.
+
+```bash
 npm run dev
 ```
 
-Open:
+**How it works:**
+- Dashboard reads from local JSON files
+- Data is processed F1 telemetry
+- Charts render instantly (no network)
+- Full editing freedom
 
-```text
-http://localhost:5173
-```
+**When to use:**
+- First time exploring
+- Testing the product experience
+- Prototyping without platform setup
+- Local development/iteration
 
-By default, the app runs in **Local Mode**.
-
-You get a working analytics dashboard immediately using processed F1 data.
-No Sisense account is required for the first run.
-
----
-
-## Aha Moment: See It Work Before Signup
-
-The developer should reach the moment of:
-
-> “This actually works in my stack.”
-
-before any signup wall.
-
-That is why the first experience runs locally:
-
-- no Sisense account
-- no token
-- no data source setup
-- no ElastiCube build dependency
-- no blocked onboarding flow
-
-The goal is to let a developer see a real chart, inside a real React app, against real data — immediately.
-
-Once the local experience makes sense, Sisense becomes the natural upgrade path.
+**No configuration needed.** It just works.
 
 ---
 
-## What This Repo Shows
+### Sisense Mode (Optional)
 
-This is not just an F1 dashboard.
-
-It is a developer acquisition workflow:
-
-1. Prototype fast with local data
-2. Keep the UI fully product-native
-3. Add an analytics provider boundary
-4. Connect Sisense Compose SDK as the governed analytics layer
-5. Move toward embedded analytics without throwing away the prototype
-
-The important point:
-
-> The repo does not demo Sisense features first.  
-> It solves a builder problem first — then shows where Sisense fits.
-
----
-
-## Why Builders Care
-
-Vibe coding makes it easier than ever to generate dashboards.
-
-But fast dashboard generation is not the same as shipping analytics inside a real product.
-
-Builders still need:
-
-- governed data models
-- reusable analytics components
-- embedded analytics inside the app UI
-- secure access to metrics
-- a path from prototype to production
-- minimal UI churn when moving from local data to real analytics infrastructure
-
-This repo demonstrates the bridge.
-
-```text
-Prototype locally
-      ↓
-Validate the product experience
-      ↓
-Add an analytics provider boundary
-      ↓
-Connect Sisense Compose SDK
-      ↓
-Ship embedded analytics
-```
-
----
-
-## Demo Experience
-
-The app presents an F1 pit-wall style decision dashboard.
-
-Current example:
-
-**VER vs PER comparison**
-
-The dashboard includes:
-
-- fastest lap comparison
-- average gap
-- stint drop
-- turning point
-- lap time trend
-- driver delta
-- tyre degradation
-- pit-wall strategy cards
-- insight assistant panel
-
-The experience is intentionally built to feel like a product feature, not a standalone BI report.
-
----
-
-## Run Modes
-
-Create:
+Once you've validated locally, connect real data.
 
 ```bash
-frontend/.env.local
-```
-
-### Local Mode
-
-Local Mode runs the dashboard using processed local F1 data.
-
-```env
-VITE_ANALYTICS_PROVIDER=local
-```
-
-Use this mode when you want to:
-
-- run the demo immediately
-- review the product experience
-- test the UI without platform setup
-- explore the analytics flow before connecting Sisense
-
----
-
-### Sisense Mode
-
-Sisense Mode activates the Compose SDK integration path.
-
-```env
+# Create .env.local in frontend/ directory
 VITE_ANALYTICS_PROVIDER=sisense
-VITE_SISENSE_URL=https://your-sisense-instance
+VITE_SISENSE_URL=https://your-sisense-instance.sisense.com
 VITE_SISENSE_TOKEN=your-api-token
 VITE_SISENSE_DATASOURCE=F1_Pit_Wall
 ```
 
-If the Sisense configuration is missing, the app does not crash.
+**How it works:**
+- Dashboard uses Sisense Compose SDK
+- Queries come from your Sisense instance
+- Same UI, real data backend
+- Full Sisense Studio integration
 
-It stays up and shows a graceful warning:
+**When to use:**
+- Production analytics
+- Multi-user access with governance
+- Real company data
+- Scaling beyond your laptop
 
-```text
-Sisense Mode requires VITE_SISENSE_URL, VITE_SISENSE_TOKEN, and VITE_SISENSE_DATASOURCE.
-Switch to Local Mode or configure Sisense.
+**If config is missing:**
+App stays up and shows a helpful message:
+```
+Sisense Mode requires environment variables.
+Running in Local Mode instead.
 ```
 
-This is intentional.
-
-A builder should be able to explore the product experience even before the analytics backend is fully connected.
+No crashes. No friction.
 
 ---
 
-## Activation: `npm install` Is the Signup
+## ⚙️ Add Sisense in 5 Minutes
 
-In this funnel, activation is not a form fill.
+### Step 1: Create Trial Account
+[Sign up for Sisense (7-day free trial)](https://www.sisense.com/trial/)
 
-Activation happens when a developer installs the SDK and starts evaluating Sisense inside their own app.
+Takes 2 minutes. No credit card required.
 
-```bash
-npm install @sisense/sdk-ui
-```
+### Step 2: Upload Sample Data
 
-That command is the real product-led growth signal.
+In Sisense Studio:
+1. Go to **Data** → **Add Data**
+2. Upload the F1 CSV files from `/data/f1-telemetry.csv`
+3. Note the data source name (e.g., `F1_Pit_Wall`)
 
-A developer who runs it has moved from watching a demo to actively testing Sisense as part of their stack.
+### Step 3: Generate Data Model
 
----
-
-## Why Sisense?
-
-A local dashboard proves the product idea.
-
-Sisense Compose SDK shows how that idea can become a real embedded analytics experience.
-
-With Sisense, the app can move from:
-
-- local files to governed data models
-- hardcoded chart logic to reusable analytics components
-- prototype visuals to embedded analytics inside the product UI
-- one-off dashboard code to a scalable analytics layer
-
-The goal is not to replace the product experience with a BI iframe.
-
-The goal is to keep the product experience custom, while letting Sisense power the analytics behind it.
-
----
-
-## What Makes This Different
-
-Most analytics demos start inside the BI tool.
-
-This one starts where modern builders actually start:
-
-- local code
-- fast iteration
-- AI-assisted development
-- product-native UI
-- a real workflow
-- a path to governed analytics
-
-The dashboard is intentionally built with a provider boundary so the app can run in two modes:
-
-- **Local Mode** — fast, zero-friction prototype
-- **Sisense Mode** — embedded analytics integration path using Compose SDK
-
----
-
-## Architecture
-
-```text
-Processed F1 Data
-      ↓
-Analytics Provider Boundary
-      ↓
-┌────────────────────┬────────────────────────┐
-│ Local Provider      │ Sisense Provider        │
-│                    │                         │
-│ Local data files    │ Compose SDK components  │
-│ Fast prototype      │ Embedded analytics path │
-└────────────────────┴────────────────────────┘
-      ↓
-F1 Pit Wall Dashboard
-      ↓
-Product-native analytics experience
-```
-
-The key architectural choice is the analytics provider boundary.
-
-The dashboard should not care whether the data comes from local files or from Sisense.
-That keeps the prototype fast while preserving a clean path toward production-grade embedded analytics.
-
----
-
-## Compose SDK Setup
-
-To connect the app to Sisense:
-
-1. Create a Sisense Trial environment
-2. Upload the processed F1 CSV files
-3. Identify the Sisense data source name
-4. Generate the data model file
+Run this command:
 
 ```bash
 npx @sisense/sdk-cli get-data-model \
-  --url <SISENSE_URL> \
-  --token <SISENSE_TOKEN> \
-  --dataSource "<DATA_SOURCE_NAME>" \
+  --url https://your-instance.sisense.com \
+  --token your-api-token \
+  --dataSource "F1_Pit_Wall" \
   --output src/sisense/f1-data-model.ts
 ```
 
-5. Add the Sisense environment variables to `frontend/.env.local`
-6. Restart the frontend
+Generates a TypeScript file with full type safety for queries.
+
+### Step 4: Create .env.local
+
+```bash
+# frontend/.env.local
+VITE_ANALYTICS_PROVIDER=sisense
+VITE_SISENSE_URL=https://your-instance.sisense.com
+VITE_SISENSE_TOKEN=your-api-token
+VITE_SISENSE_DATASOURCE=F1_Pit_Wall
+```
+
+### Step 5: Restart & You're Done
 
 ```bash
 npm run dev
 ```
 
+Dashboard now pulls data from Sisense.
+
+✅ Same UI  
+✅ Real data  
+✅ Production-ready  
+
 ---
 
-## Implementation Status
+## 🧩 Customization: Make It Yours
 
-### Implemented
+### Replace F1 with Your Domain
+
+The dashboard structure is generic. The data is just F1 telemetry.
+
+**Change the data:**
+
+1. Replace `/frontend/src/data/f1-telemetry.json` with your own dataset
+2. Update `/frontend/src/types/analytics.ts` to match your schema
+3. Update chart components to use your metrics
+4. Done.
+
+**Example:** Replace `lap_time`, `tyre_degradation`, `gap_to_leader` with your metrics.
+
+### Add Another Comparison
+
+Currently: Verstappen vs Pérez
+
+Want: Hamilton vs Russell? Leclerc vs Sainz? Users vs competitors? Revenue by region?
+
+**File to change:** `src/components/ComparisonView.tsx`
+
+Current flow uses a hardcoded pair. Make it dynamic.
+
+### Replace a Chart with Sisense
+
+Don't replace everything at once.
+
+Replace one chart:
+
+1. Remove the local chart component
+2. Add a Sisense Compose SDK component
+3. Query the same metric from Sisense
+4. Test that it works
+5. Move to the next chart
+
+This is the **bridge approach.** Gradual migration. Zero risk.
+
+**Example:**
+```typescript
+// Before (local)
+import { LapTimeChart } from './charts/LapTimeChart';
+
+// After (Sisense)
+import { SisenseLapTimeChart } from './sisense/SisenseLapTimeChart';
+```
+
+### Deploy to Vercel
+
+One-click deployment:
+
+```bash
+npm install -g vercel
+vercel
+```
+
+Follow prompts. Your dashboard is live.
+
+If you added Sisense, pass environment variables to Vercel:
+```
+VITE_SISENSE_URL=...
+VITE_SISENSE_TOKEN=...
+```
+
+---
+
+## 💡 Suggested First Forks
+
+Pick one and start:
+
+1. **Add Another F1 Race**
+   - Use Monaco, Silverstone, or Austin telemetry
+   - Add a race selector dropdown
+   - Compare same drivers across different tracks
+
+2. **Build a "Head to Head" Mode**
+   - HAM vs RUS comparison
+   - LEC vs SAI comparison
+   - Dynamic driver selection
+   - Share comparison link
+
+3. **Replace One Chart with Sisense**
+   - Keep everything local except lap trends
+   - Verify Sisense connection works
+   - Expand to other charts
+
+4. **Customize for Your Domain**
+   - Same UI, your data
+   - SaaS metrics (MRR, Churn, LTV)
+   - E-commerce (Sales, AOV, CAC)
+   - Supply chain (Lead times, inventory turns)
+   - Pick your domain
+
+5. **Add AI Chat Panel**
+   - "What's the biggest gap between these drivers?"
+   - "Should we pit now or on the next lap?"
+   - Natural language queries against the data
+   - OpenAI + Sisense Compose SDK
+
+---
+
+## 🏛️ Architecture & Design
+
+### Why a Provider Boundary?
+
+This matters for the conversion journey.
+
+```
+┌─────────────────────────────────────────┐
+│         F1 Pit Wall Dashboard           │
+│     (Product-native, fully custom)      │
+└────────────────┬────────────────────────┘
+                 │
+         Analytics Provider
+         (One interface, two implementations)
+         │
+    ┌────┴──────┐
+    │            │
+    ▼            ▼
+Local Mode    Sisense Mode
+(JSON files)  (Compose SDK)
+```
+
+**Benefits:**
+
+- Dashboard doesn't know or care where data comes from
+- Can switch providers without touching UI code
+- Prototype with local data
+- Upgrade to Sisense without rewriting
+- Easy to add other providers (BigQuery, Postgres, etc.)
+
+### Component Flow
+
+```
+App.tsx
+├── <SisenseContextProvider> (if Sisense enabled)
+├── <DashboardHome>
+│   ├── <DriverSelector>
+│   ├── <ComparisonView>
+│   │   ├── <KPICard>
+│   │   ├── <LapTrendChart>
+│   │   ├── <TyreDegradationChart>
+│   │   ├── <DriverDeltaChart>
+│   │   └── <PitWallStrategyCard>
+│   └── <InsightAssistant>
+```
+
+Each component is **provider-agnostic.**
+
+If data is local, it queries the local provider.  
+If Sisense is configured, it queries Sisense.  
+Same component code.
+
+---
+
+## 🔌 Sisense Integration Details
+
+### What Gets Connected?
+
+When you add Sisense environment variables:
+
+1. **Compose SDK loads** (if `VITE_SISENSE_URL` is defined)
+2. **SisenseContextProvider wraps the app** (authentication + session)
+3. **Query components use Sisense hooks** (instead of local data)
+4. **Same UI renders** (no visual difference)
+
+### The Bridge Approach
+
+You don't have to replace everything at once.
+
+**Phase 1:** Keep everything local (2 min to see it work)  
+**Phase 2:** Add Sisense config, one chart still uses local data  
+**Phase 3:** Replace charts incrementally  
+**Phase 4:** All charts use Sisense  
+
+Each phase is reversible. If Sisense breaks, fall back to local.
+
+### Example: Replacing One Chart
+
+```typescript
+// src/components/ComparisonView.tsx
+
+// Check if Sisense is configured
+const isSisenseEnabled = !!process.env.VITE_SISENSE_URL;
+
+export function LapTrendVisualization() {
+  if (isSisenseEnabled) {
+    // Use Sisense Compose SDK component
+    return <SisenseLapTimeChart driverId={driverId} />;
+  } else {
+    // Fall back to local data
+    return <LocalLapTimeChart data={localData} />;
+  }
+}
+```
+
+---
+
+## ❓ FAQ
+
+### Do I need a Sisense account to run this?
+
+**No.** Local mode works immediately. Zero setup.
+
+Sisense is optional, for when you want production features (governance, multi-user, real data).
+
+### Can I use my own data?
+
+**Yes.** Replace the JSON files in `src/data/` with your own dataset.
+
+Update the types in `src/types/analytics.ts` to match your schema, then update components.
+
+### How do I deploy this?
+
+**Vercel (recommended):**
+```bash
+npm install -g vercel
+vercel
+```
+
+**Other platforms:**
+- Netlify: `netlify deploy --prod --dir dist`
+- AWS: Build → upload to S3 + CloudFront
+- Docker: See `Dockerfile` in repo
+
+### What if Sisense config fails?
+
+App won't crash. It shows a helpful message and falls back to local mode.
+
+You can still develop and test.
+
+### Can I use this in production?
+
+**Local mode:** Not recommended for production (data is hardcoded).
+
+**Sisense mode:** Yes. Sisense is designed for production analytics.
+
+Governance, multi-user, real-time data, all baked in.
+
+### How much does Sisense cost?
+
+Free trial: 7 days, full features.  
+Pricing: [See Sisense pricing](https://www.sisense.com/pricing/)
+
+For embedded analytics, pricing is per-user or per-API-call. Talk to sales for your use case.
+
+### Can I fork this and sell it?
+
+Yes. This repo uses [MIT License](LICENSE).
+
+Fork, customize, deploy, make money. We only ask you credit Sisense in your README (and this is genuinely useful for discovery).
+
+### How do I add more metrics?
+
+1. Add new fields to your data (JSON or Sisense)
+2. Create a new component for the metric
+3. Add it to the comparison view
+4. Done.
+
+See [Customization Guide](#customization) for examples.
+
+### What if I get stuck?
+
+- **Setup issues:** Check [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
+- **Code questions:** Open an issue on GitHub
+- **Sisense questions:** [Sisense Compose SDK Docs](https://sisense.dev)
+- **Ideas for extensions:** Drop a GitHub discussion
+
+---
+
+## 🔗 Useful Links
+
+- **[Sisense Free Trial](https://www.sisense.com/trial/)** — Get started
+- **[Compose SDK Playground](https://sisense.dev/playground)** — Interactive sandbox
+- **[Compose SDK Docs](https://sisense.dev)** — Full API reference
+- **[Sisense GitHub](https://github.com/sisenseteam)** — Sample code & MCP
+- **[Live Demo](https://frontend-two-tau-54.vercel.app)** — See it in action
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React 18 + Vite + TypeScript
+- **Styling:** Tailwind CSS
+- **Charts:** Recharts (local) + Sisense Compose SDK (optional)
+- **Data:** Processed F1 telemetry (JSON)
+- **Hosting:** Vercel (recommended)
+- **Analytics:** Sisense Compose SDK (optional)
+
+---
+
+## 📊 Implementation Status
+
+### ✅ Implemented
 
 - React + Vite + TypeScript frontend
-- Local dashboard experience
-- F1 pit-wall decision UI
-- VER vs PER comparison flow
-- KPI cards
-- lap trend visualization
-- driver delta view
-- tyre degradation view
-- pit-wall strategy cards
-- local analytics provider
-- Sisense mode configuration boundary
-- `SisenseContextProvider`
-- Compose SDK proof component: `SisenseLapTimeChart`
-- graceful fallback when Sisense environment variables are missing
+- Local data provider (JSON files)
+- F1 pit-wall decision dashboard UI
+- Driver comparison flow (Verstappen vs Pérez)
+- KPI cards (gap, stint drop, turning point)
+- Lap time trend visualization
+- Driver delta (time gap over race)
+- Tyre degradation view
+- Pit-wall strategy cards
+- Insight assistant panel
+- Sisense mode configuration
+- `SisenseContextProvider` wrapper
+- Graceful fallback when Sisense env vars missing
+- Compose SDK proof-of-concept: `SisenseLapTimeChart`
 
-### Ready For Extension
+### 🚀 Ready for Extension
 
-- full Sisense-backed chart replacement
-- additional Compose SDK components
-- more race datasets
-- multi-driver comparison
-- multi-race comparison
-- AI-generated pit-wall race summary
-- public technical walkthrough
-- StackBlitz / CodeSandbox browser-first version
-
----
-
-## Suggested Builder Extensions
-
-Good first forks:
-
-- add another F1 race dataset
-- add HAM vs RUS comparison
-- replace one local chart with a Sisense Compose SDK chart
-- add a race strategist recommendation panel
-- add an AI-generated post-race summary
-- add support for multiple race sessions
-- deploy the frontend to Vercel
-- add a short technical screencast
+- Full Sisense-backed chart replacement (one-by-one)
+- Additional Compose SDK components
+- More F1 race datasets
+- Multi-driver comparison (arbitrary pairs)
+- Multi-race analysis
+- AI-powered pit-wall race summaries
+- StackBlitz / CodeSandbox live editor version
+- Technical screencast walkthrough
+- Production deployment checklist
 
 ---
 
-## PLG Strategy: How This Converts Builders
+## 📈 How This Converts (PLG Strategy)
 
-This repo is designed as a developer-led growth motion.
+This repo is designed as a **developer-led growth motion.**
 
-### Step 1 — Acquisition
+### Step 1: Acquisition (Right Now)
 
-The prototype itself is the acquisition channel.
+CTA: **"Clone this repo. See analytics work in 90 seconds."**
 
-The CTA is:
+Not: "Sign up for Sisense."  
+Not: "Learn our platform."  
+Not: "Configure your data source."
 
-> Fork this repo. Add analytics to your React app in under 10 minutes.
+Just: **Clone. npm install. npm run dev.**
 
-A developer should not need to understand Sisense first.
-They should understand the problem first:
+### Step 2: Aha Moment (2 Minutes)
 
-> “I have a React app. I need analytics inside it. I do not want to rebuild the UI later.”
+Developer sees:
+- ✅ A real analytics dashboard
+- ✅ Working in their React stack
+- ✅ No signup walls
+- ✅ No platform friction
 
-### Step 2 — Aha Moment
+They think: **"This could work in my app."**
 
-The aha moment must happen in under five minutes.
+### Step 3: Activation (Voluntary)
 
-The developer sees a live analytics experience working locally, with no signup wall.
-
-Best next improvement:
-
-> Add a StackBlitz or CodeSandbox embed so builders can see a live chart rendering in the browser immediately.
-
-### Step 3 — Activation
-
-Activation happens when the developer installs the SDK:
+When they're ready to level up, they run:
 
 ```bash
 npm install @sisense/sdk-ui
 ```
 
-That is the moment they move from passive observer to active evaluator.
+That command is the real conversion signal.
 
-### Step 4 — Expansion
+They've moved from **passive observer** → **active evaluator.**
 
-After the first local win, the repo should guide the developer toward:
+### Step 4: Expansion
 
-- replacing local data with Sisense queries
-- generating a governed data model
-- embedding analytics components in their own app
-- turning a dashboard prototype into an analytics product
+After the first local win, they naturally ask:
+
+- "Can I use real data?"
+- "How do I deploy this?"
+- "Can I secure it with authentication?"
+- "How do I govern this at scale?"
+
+Each question is a Sisense answer.
 
 ---
 
-## Repo Structure
+## 🎯 For Product Teams at Sisense
 
-```text
-frontend/
-  src/
-    analytics/
-      providers/
-    components/
-      sisense/
-    sisense/
-      f1-data-model.ts
+This repo is:
 
-strategy/
-  strategy-brief.md
+1. **An acquisition funnel** — "Free trial" that doesn't require a trial signup
+2. **A proof of concept** — Shows Compose SDK works in modern stacks
+3. **A community asset** — Forkable, extensible, shareable
+4. **A developer story** — Not "Sisense is great" but "I shipped analytics fast"
 
-content/
-  linkedin-post.md
+**Success metrics:**
+- Forks + GitHub stars
+- npm installs of @sisense/sdk-ui
+- Sisense trial signups (after people fork)
+- Community extensions + remixes
+- "I used this repo" stories
 
-prompts/
+---
+
+## 📝 License
+
+MIT. Fork it. Extend it. Ship it.
+
+---
+
+## 🙌 Contributing
+
+Have an idea for an extension? Found a bug?
+
+**Open an issue or submit a PR.**
+
+Good contributions:
+- New race datasets
+- Additional driver comparisons
+- UI customizations
+- Sisense integration improvements
+- Documentation updates
+- Deployment guides
+
+---
+
+## 🚀 Quick Links
+
+| Want to... | Go to... |
+|---|---|
+| **See it work** | [Live Demo](https://frontend-two-tau-54.vercel.app) |
+| **Explore the code** | [GitHub Repo](https://github.com/lugypresko/sisense-test) |
+| **Understand the strategy** | [Explainer](https://notebooklm.google.com/notebook/...) |
+| **Fork & customize** | Clone the repo + follow [Customization Guide](#customization) |
+| **Add Sisense** | Follow [Add Sisense in 5 Minutes](#add-sisense) |
+| **Deploy to prod** | See [Deployment Guide](docs/DEPLOYMENT.md) |
+| **Get help** | Open a [GitHub Issue](https://github.com/lugypresko/sisense-test/issues) |
+
+---
+
+## 🎬 What's Next?
+
+### For Developers Forking This:
+1. Clone it
+2. Run it locally
+3. Customize to your domain
+4. Deploy to Vercel
+5. Share your version in the discussions
+
+### For Sisense Community:
+1. Try the demo
+2. Extend with your ideas
+3. Tag `@sisense` when you ship
+4. We'll feature great forks
+
+### For Product Managers:
+1. This shows how developers actually build analytics
+2. Not inside your platform — next to it
+3. The CTA is "fork and run," not "sign up"
+4. Success is when developers start building, not when they log in
+
+---
+
+## 💭 Philosophy
+
+> **Builders don't start inside platforms. They start with problems.**
+>
+> This repo solves a problem first (adding analytics to a React app), then shows where Sisense fits.
+>
+> That's product-led growth.
+
+---
+
+**Built by [Your Name] with ❤️ and AI assistance.**  
+**Powered by Sisense Compose SDK.**  
+**Inspired by modern development workflows.**
+
+```
+Local Prototype → Product Experience → Sisense-Powered → Ship
 ```
 
+**You're somewhere on that journey. This repo will help.**
+
 ---
 
-## Positioning Summary
+<p align="center">
+  Made for builders, by builders.
+</p>
 
-This repo is a proof of a modern analytics builder journey:
-
-> Start with a fast local prototype.  
-> Keep the experience product-native.  
-> Use Sisense Compose SDK to grow it into embedded analytics.
-
-It is not just a racing dashboard.
-
-It is a small example of how developers can build analytics features the way modern software is built:
-
-**fast first, product-native, then governed and scalable.**
+<p align="center">
+  <a href="https://github.com/lugypresko/sisense-test">⭐ Star on GitHub</a> ·
+  <a href="https://twitter.com/sisense">Follow @sisense</a> ·
+  <a href="https://dev.to">Read on Dev.to</a>
+</p>
