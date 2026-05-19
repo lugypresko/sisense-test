@@ -2,6 +2,10 @@
 
 F1 Pit Wall is a Sisense Compose SDK starter kit showing how AI-native builders can turn telemetry data into an embedded analytics experience.
 
+## Showcase
+
+![F1 Pit Wall Showcase](docs/screenshots/vibecoders-showcase.png)
+
 ## Why this matters
 
 Vibe coding can generate dashboards fast, but serious analytics needs a reusable, embedded, governed analytics layer.
@@ -92,4 +96,3 @@ strategy/strategy-brief.md
 content/linkedin-post.md
 prompts/
 ```
-
