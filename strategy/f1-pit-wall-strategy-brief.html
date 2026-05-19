@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>F1 Pit Wall Insights: Strategy Brief</title>
+  <meta name="description" content="Product-led growth strategy brief for F1 Pit Wall Insights and Sisense Compose SDK." />
+  <style>
+    :root {
+      --bg: #071017;
+      --bg-soft: #0b1620;
+      --panel: rgba(255,255,255,0.065);
+      --panel-strong: rgba(255,255,255,0.105);
+      --text: #edf5ff;
+      --muted: #9fb0c3;
+      --line: rgba(255,255,255,0.12);
+      --accent: #7dd3fc;
+      --accent-2: #facc15;
+      --accent-3: #22c55e;
+      --danger: #fb7185;
+      --code: #030712;
+      --shadow: 0 24px 80px rgba(0,0,0,0.35);
+      --radius-xl: 28px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(125, 211, 252, 0.18), transparent 26%),
+        radial-gradient(circle at 85% 4%, rgba(250, 204, 21, 0.14), transparent 24%),
+        linear-gradient(180deg, #071017 0%, #08131d 46%, #05080d 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 42px 22px 80px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.035)),
+        linear-gradient(135deg, rgba(125,211,252,0.10), rgba(250,204,21,0.055));
+      box-shadow: var(--shadow);
+      padding: clamp(28px, 6vw, 64px);
+    }
+
+    .hero:before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background:
+        linear-gradient(90deg, transparent 0 5%, rgba(255,255,255,0.08) 5% 6%, transparent 6% 12%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 96px);
+      opacity: 0.32;
+      pointer-events: none;
+      mask-image: linear-gradient(180deg, black, transparent 82%);
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 850px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent-3);
+      box-shadow: 0 0 24px var(--accent-3);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-subtitle {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: #cfe0f2;
+      font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.45;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .primary-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: #f8fafc;
+      color: #071017;
+      font-weight: 800;
+      box-shadow: 0 12px 32px rgba(125,211,252,0.16);
+    }
+
+    .secondary-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      font-weight: 700;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .metric {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(0,0,0,0.18);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #fff;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 28px;
+      margin-top: 30px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(7, 16, 23, 0.72);
+      backdrop-filter: blur(16px);
+      padding: 18px;
+      max-height: calc(100vh - 44px);
+      overflow: auto;
+    }
+
+    .sidebar-title {
+      margin: 0 0 12px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .toc-link {
+      display: block;
+      border-radius: 10px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .toc-link:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+      text-decoration: none;
+    }
+
+    .toc-h2 { padding: 8px 10px; margin-top: 4px; font-weight: 750; }
+    .toc-h3 { padding: 6px 10px 6px 22px; font-size: 13px; }
+
+    main.article {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,0.045);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 4vw, 48px);
+    }
+
+    .article > *:first-child { margin-top: 0; }
+
+    .article h2 {
+      margin: 54px 0 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+    }
+
+    .article h3 {
+      margin: 34px 0 12px;
+      color: #ffffff;
+      font-size: clamp(21px, 3vw, 28px);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .article h4 {
+      margin: 26px 0 8px;
+      color: #e8f4ff;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .article p, .article li { color: #c9d7e6; }
+    .article strong { color: #ffffff; }
+
+    .article ul, .article ol {
+      margin: 12px 0 22px;
+      padding-left: 24px;
+    }
+
+    .article li { margin: 7px 0; }
+
+    .article blockquote {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border: 1px solid rgba(125,211,252,0.28);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+      background: rgba(125,211,252,0.075);
+    }
+
+    .article blockquote p {
+      margin: 0;
+      color: #eaf7ff;
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .article hr {
+      border: 0;
+      height: 1px;
+      margin: 36px 0;
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+    }
+
+    code {
+      padding: 2px 6px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 7px;
+      background: rgba(0,0,0,0.34);
+      color: #e0f2fe;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: 20px 0;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(0,0,0,0.42)), var(--code);
+    }
+
+    pre code {
+      display: block;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #dbeafe;
+      white-space: pre;
+    }
+
+    .article table {
+      width: 100%;
+      margin: 24px 0;
+      border-collapse: collapse;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(0,0,0,0.18);
+    }
+
+    .article th, .article td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .article th {
+      color: #ffffff;
+      background: rgba(255,255,255,0.075);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .article tr:last-child td { border-bottom: 0; }
+
+    .note-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .note-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.05);
+      padding: 16px;
+    }
+
+    .note-card b { display: block; color: #fff; margin-bottom: 6px; }
+    .note-card span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+
+    .footer {
+      margin-top: 30px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; max-height: none; }
+      .metrics-grid, .note-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 18px 14px 48px; }
+      .hero { padding: 26px 20px; }
+      .metrics-grid, .note-strip { grid-template-columns: 1fr; }
+      main.article { padding: 22px 18px; }
+      .article table { display: block; overflow-x: auto; }
+      .primary-cta, .secondary-cta { width: 100%; justify-content: center; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .page { max-width: none; padding: 0; }
+      .hero, main.article, .sidebar { box-shadow: none; background: #fff; color: #111; border-color: #ddd; }
+      .layout { display: block; }
+      .sidebar { display: none; }
+      .article p, .article li, .hero-subtitle, .metric span { color: #333; }
+      .article h2, .article h3, .article h4, .article strong, .metric strong { color: #111; }
+      a { color: #0645ad; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-content">
+        <div class="eyebrow"><span class="dot"></span> Product-Led Growth Strategy Brief</div>
+        <h1 id="page-title">F1 Pit Wall Insights: Strategy Brief</h1>
+        <p class="hero-subtitle">A GitHub-first developer acquisition motion: prove embedded analytics in React locally, then use Sisense Compose SDK as the upgrade path to governed, production-grade embedded analytics.</p>
+        <div class="cta-row">
+          <a class="primary-cta" href="#part-3-the-call-to-action-plg-funnel">Fork this repo. Add analytics in under 10 minutes →</a>
+          <a class="secondary-cta" href="#part-1-the-audience">View audience strategy</a>
+        </div>
+        <div class="metrics-grid" aria-label="Core strategy metrics">
+          <div class="metric"><strong>500+</strong><span>GitHub stars target in month one</span></div>
+          <div class="metric"><strong>&lt;5 min</strong><span>Zero-friction developer aha moment</span></div>
+          <div class="metric"><strong>React</strong><span>Product-native analytics surface</span></div>
+          <div class="metric"><strong>PLG</strong><span>Repo becomes the acquisition channel</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="note-strip" aria-label="Core strategy highlights">
+      <div class="note-card"><b>The audience</b><span>Senior full-stack and product engineers who need analytics shipped in weeks, not quarters.</span></div>
+      <div class="note-card"><b>The move</b><span>Start local and forkable; activate with <code>npm install @sisense/sdk-ui</code>.</span></div>
+      <div class="note-card"><b>The conversion</b><span>Governance, multi-tenancy, SSO, AI Assistant, and scale turn builders into buyers.</span></div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Table of contents">
+        <p class="sidebar-title">Contents</p>
+        <a class="toc-link toc-h2" href="#executive-summary">Executive Summary</a>
+<a class="toc-link toc-h2" href="#part-1-the-audience">Part 1: The Audience</a>
+<a class="toc-link toc-h3" href="#primary-persona-the-embedded-analytics-builder">Primary Persona: The Embedded Analytics Builder</a>
+<a class="toc-link toc-h3" href="#secondary-personas">Secondary Personas</a>
+<a class="toc-link toc-h2" href="#part-2-where-we-show-this-distribution-channels">Part 2: Where We Show This (Distribution Channels)</a>
+<a class="toc-link toc-h3" href="#tier-1-direct-developer-reach-highest-impact">Tier 1: Direct Developer Reach (Highest Impact)</a>
+<a class="toc-link toc-h3" href="#tier-2-ecosystem-conference-presence">Tier 2: Ecosystem &amp; Conference Presence</a>
+<a class="toc-link toc-h3" href="#tier-3-official-sisense-channels-amplification">Tier 3: Official Sisense Channels (Amplification)</a>
+<a class="toc-link toc-h2" href="#part-3-the-call-to-action-plg-funnel">Part 3: The Call to Action (PLG Funnel)</a>
+<a class="toc-link toc-h3" href="#the-developer-journey-awareness-activation-conversion">The Developer Journey: Awareness → Activation → Conversion</a>
+<a class="toc-link toc-h3" href="#step-1-awareness-make-the-prototype-the-pitch">Step 1: Awareness (Make the Prototype the Pitch)</a>
+<a class="toc-link toc-h3" href="#step-2-aha-moment-5-minutes-zero-friction">Step 2: Aha Moment (&lt;5 minutes, Zero Friction)</a>
+<a class="toc-link toc-h3" href="#step-3-activation-npm-install-real-signup">Step 3: Activation (npm install = Real Signup)</a>
+<a class="toc-link toc-h3" href="#step-4-habit-loop-community">Step 4: Habit Loop (Community)</a>
+<a class="toc-link toc-h3" href="#step-5-conversion-value-does-the-selling">Step 5: Conversion (Value Does the Selling)</a>
+<a class="toc-link toc-h2" href="#the-funnel-in-numbers">The Funnel in Numbers</a>
+<a class="toc-link toc-h2" href="#why-this-beats-traditional-sales">Why This Beats Traditional Sales</a>
+<a class="toc-link toc-h3" href="#traditional-bi-sales">Traditional BI Sales:</a>
+<a class="toc-link toc-h3" href="#f1-pit-wall-plg">F1 Pit Wall PLG:</a>
+<a class="toc-link toc-h2" href="#positioning">Positioning</a>
+<a class="toc-link toc-h3" href="#for-developers">For Developers:</a>
+<a class="toc-link toc-h3" href="#for-pmsfounders">For PMs/Founders:</a>
+<a class="toc-link toc-h3" href="#for-sisense-leadership">For Sisense Leadership:</a>
+<a class="toc-link toc-h2" href="#success-metrics-real-not-vanity">Success Metrics (Real, Not Vanity)</a>
+<a class="toc-link toc-h3" href="#month-1">Month 1:</a>
+<a class="toc-link toc-h3" href="#month-2-3">Month 2-3:</a>
+<a class="toc-link toc-h3" href="#month-4">Month 4+:</a>
+<a class="toc-link toc-h2" href="#timeline-launch-plan">Timeline &amp; Launch Plan</a>
+<a class="toc-link toc-h3" href="#week-1-foundation">Week 1: Foundation</a>
+<a class="toc-link toc-h3" href="#week-2-launch-day">Week 2: Launch Day</a>
+<a class="toc-link toc-h3" href="#week-3-4-ride-the-wave">Week 3-4: Ride the Wave</a>
+<a class="toc-link toc-h3" href="#week-5-expansion">Week 5+: Expansion</a>
+<a class="toc-link toc-h2" href="#why-this-works-for-sisense">Why This Works for Sisense</a>
+<a class="toc-link toc-h3" href="#1-bottom-up-adoption">1. Bottom-Up Adoption</a>
+<a class="toc-link toc-h3" href="#2-proof-of-compose-sdk">2. Proof of Compose SDK</a>
+<a class="toc-link toc-h3" href="#3-developer-goodwill">3. Developer Goodwill</a>
+<a class="toc-link toc-h3" href="#4-competitive-advantage">4. Competitive Advantage</a>
+<a class="toc-link toc-h3" href="#5-community-asset">5. Community Asset</a>
+<a class="toc-link toc-h2" href="#risk-mitigation">Risk Mitigation</a>
+<a class="toc-link toc-h3" href="#risk-theyll-just-use-local-mode-forever">Risk: &quot;They&#x27;ll just use local mode forever&quot;</a>
+<a class="toc-link toc-h3" href="#risk-competitors-will-fork-this">Risk: &quot;Competitors will fork this&quot;</a>
+<a class="toc-link toc-h3" href="#risk-this-is-just-a-demo-not-real-sisense">Risk: &quot;This is just a demo, not real Sisense&quot;</a>
+<a class="toc-link toc-h3" href="#risk-sales-wont-like-bottom-up-growth">Risk: &quot;Sales won&#x27;t like bottom-up growth&quot;</a>
+<a class="toc-link toc-h2" href="#the-narrative-why-someone-should-care">The Narrative (Why Someone Should Care)</a>
+      </aside>
+      <main class="article">
+        <h2 id="executive-summary">Executive Summary</h2>
+<p><strong>The Bet:</strong> A senior full-stack engineer at a B2B SaaS company needs embedded analytics <strong>in weeks, not quarters</strong>. Traditional BI platforms require a 6-month sales cycle and a dedicated BI team. This repo proves you can ship embedded analytics with React + Sisense Compose SDK in days, then scale when you need governance.</p>
+<p><strong>The Motion:</strong> From &quot;I'll build this with Recharts&quot; → &quot;npm install @sisense/sdk-ui&quot; → &quot;Talk to Sisense about multi-tenancy&quot;</p>
+<hr />
+<h2 id="part-1-the-audience">Part 1: The Audience</h2>
+<h3 id="primary-persona-the-embedded-analytics-builder">Primary Persona: The Embedded Analytics Builder</h3>
+<p><strong>Who:</strong></p>
+<ul>
+<li>Senior full-stack or product engineer (React/TypeScript/Node/Python)</li>
+<li>At a B2B SaaS company</li>
+<li>Tasked with adding customer-facing analytics directly to the product</li>
+<li><strong>NOT a BI specialist</strong></li>
+</ul>
+<p><strong>Their Pain:</strong></p>
+<blockquote>
+<p>&quot;I need to ship embedded analytics in weeks, not quarters — without owning a BI team.&quot;</p>
+</blockquote>
+<p><strong>Current Approach (What They're Doing Now):</strong></p>
+<ol>
+<li>Evaluates: Recharts/D3 (DIY), Metabase, Cube.dev, Superset, or Sisense</li>
+<li>Concerns: Time-to-ship, multi-tenancy support, cost</li>
+<li>Reality: Built and hated a chart library from scratch at least once</li>
+<li>Blocker: &quot;If I go with Sisense, will it require 6 months and a sales cycle?&quot;</li>
+</ol>
+<p><strong>What They Need to Hear:</strong></p>
+<ul>
+<li>✅ &quot;You can ship working analytics in days&quot;</li>
+<li>✅ &quot;No, Compose SDK doesn't require a BI team&quot;</li>
+<li>✅ &quot;Your React code stays clean and product-native&quot;</li>
+<li>✅ &quot;Multi-tenancy? We have you covered when you're ready&quot;</li>
+</ul>
+<hr />
+<h3 id="secondary-personas">Secondary Personas</h3>
+<p><strong>AI-Forward SaaS Builders</strong></p>
+<ul>
+<li>Building LLM-powered analytics experiences</li>
+<li>Want &quot;natural language queries against data&quot;</li>
+<li>See Sisense Assistant + Compose SDK as an AI-native layer</li>
+<li>Attracted to: &quot;Chat-based analytics for your product&quot;</li>
+</ul>
+<p><strong>Analytics Engineers at Data-Heavy SaaS</strong></p>
+<ul>
+<li>Building dbt data pipelines, need a presentation layer</li>
+<li>Tired of static dashboards</li>
+<li>Want embedded insights for their customers</li>
+<li>Attending: Coalesce, dbt communities</li>
+</ul>
+<p><strong>Founder/Product Managers</strong></p>
+<ul>
+<li>Evaluating &quot;build vs. buy&quot; for analytics</li>
+<li>Want proof: &quot;Can Sisense work in our stack?&quot;</li>
+<li>Concerned: &quot;Will we be locked into your platform?&quot;</li>
+<li>Convinced by: Working repo that stays product-native</li>
+</ul>
+<hr />
+<h2 id="part-2-where-we-show-this-distribution-channels">Part 2: Where We Show This (Distribution Channels)</h2>
+<h3 id="tier-1-direct-developer-reach-highest-impact">Tier 1: Direct Developer Reach (Highest Impact)</h3>
+<h4>1. <strong>GitHub</strong> (Primary Channel)</h4>
+<ul>
+<li><strong>Why:</strong> Developers fork repos. Stardom is credibility.</li>
+<li><strong>Tactic:</strong> Public repo with excellent README (you're doing this)</li>
+<li><strong>Target:</strong> 500+ stars in month 1, 100+ forks</li>
+<li><strong>Keywords:</strong> <code>react</code>, <code>analytics</code>, <code>sisense</code>, <code>compose-sdk</code>, <code>embedded-analytics</code></li>
+</ul>
+<h4>2. <strong>HackerNews / &quot;Show HN&quot;</strong> (Viral Potential)</h4>
+<ul>
+<li><strong>Why:</strong> Technical founder audience. High signal-to-noise.</li>
+<li><strong>Tactic:</strong> &quot;Show HN: F1 Pit Wall Insights — Ship Embedded Analytics in Days&quot;</li>
+<li><strong>Audience:</strong> Exact match for &quot;build vs buy&quot; decision makers</li>
+<li><strong>If it hits:</strong> 500+ upvotes = 20K+ impressions, 100+ trial signups</li>
+</ul>
+<h4>3. <strong>Dev.to / Hashnode</strong> (SEO + Community)</h4>
+<ul>
+<li><strong>Why:</strong> Developers subscribe to technical content.</li>
+<li><strong>Tactic:</strong> Post the storytelling narrative (you wrote it)</li>
+<li><strong>Title:</strong> &quot;Embedded Analytics Without the BI Platform Tax&quot;</li>
+<li><strong>Target:</strong> 5,000+ views, links back to GitHub</li>
+</ul>
+<h4>4. <strong>Reddit: r/webdev, r/reactjs, r/SaaS</strong> (Niche Communities)</h4>
+<ul>
+<li><strong>Why:</strong> Real developers solving real problems.</li>
+<li><strong>Tactic:</strong> &quot;I built embedded analytics in React using Sisense Compose SDK. AMA.&quot;</li>
+<li><strong>Expect:</strong> 50-100 upvotes, targeted questions about multi-tenancy/pricing</li>
+</ul>
+<h4>5. <strong>Vercel / Supabase / Neon Communities</strong> (Full-Stack Builders)</h4>
+<ul>
+<li><strong>Why:</strong> Exact audience: building full-stack SaaS.</li>
+<li><strong>Tactic:</strong> &quot;How we added analytics to our product without an analytics team&quot;</li>
+<li><strong>Discord/Slack:</strong> Share in #projects or #built-with channels</li>
+</ul>
+<hr />
+<h3 id="tier-2-ecosystem-conference-presence">Tier 2: Ecosystem &amp; Conference Presence</h3>
+<h4>6. <strong>Coalesce Conference / dbt Communities</strong> (Analytics Engineers)</h4>
+<ul>
+<li><strong>Why:</strong> Data engineers influence tooling decisions.</li>
+<li><strong>Tactic:</strong> &quot;The Presentation Layer Problem: How to Embed Analytics&quot;</li>
+<li><strong>Audience:</strong> Analytics engineers building data products</li>
+</ul>
+<h4>7. <strong>React Summit / JSNation</strong> (Frontend Conferences)</h4>
+<ul>
+<li><strong>Why:</strong> Compose SDK is React-native. This is the audience.</li>
+<li><strong>Tactic:</strong> Conference talk proposal: &quot;Building Analytics as a Product Feature&quot;</li>
+<li><strong>Expected:</strong> 300-500 attendees, high engagement</li>
+</ul>
+<h4>8. <strong>AI Builder Communities</strong> (Latent Space, AI Engineer Summit, Cursor users)</h4>
+<ul>
+<li><strong>Why:</strong> AI-forward builders want &quot;analytics as an agent&quot;</li>
+<li><strong>Tactic:</strong> &quot;Natural Language Queries Against Your Data: AI + Sisense&quot;</li>
+<li><strong>Discord:</strong> Latent Space, AI Engineer Summit communities</li>
+</ul>
+<h4>9. <strong>Product Hunt</strong> (SaaS Founders)</h4>
+<ul>
+<li><strong>Why:</strong> Founders evaluating &quot;how to add analytics&quot;</li>
+<li><strong>Tactic:</strong> Position as standalone &quot;embedded analytics starter kit&quot;</li>
+<li><strong>Target:</strong> 200-500 upvotes, featured as &quot;Tool for Builders&quot;</li>
+</ul>
+<hr />
+<h3 id="tier-3-official-sisense-channels-amplification">Tier 3: Official Sisense Channels (Amplification)</h3>
+<h4>10. <strong>Sisense Blog / Developer Docs</strong></h4>
+<ul>
+<li><strong>Feature:</strong> &quot;How to Build Embedded Analytics in React&quot;</li>
+<li><strong>Link from:</strong> Compose SDK docs</li>
+<li><strong>Promote:</strong> Sisense official social accounts</li>
+<li><strong>Expected reach:</strong> 5K-20K per post</li>
+</ul>
+<hr />
+<h2 id="part-3-the-call-to-action-plg-funnel">Part 3: The Call to Action (PLG Funnel)</h2>
+<h3 id="the-developer-journey-awareness-activation-conversion">The Developer Journey: Awareness → Activation → Conversion</h3>
+<p><strong>The fundamental challenge:</strong></p>
+<blockquote>
+<p>A developer on the sidelines is either skeptical or busy (usually both). The only thing that moves them is a <strong>working artifact they can immediately touch</strong>.</p>
+</blockquote>
+<hr />
+<h3 id="step-1-awareness-make-the-prototype-the-pitch">Step 1: Awareness (Make the Prototype the Pitch)</h3>
+<p><strong>CTA (Top of Funnel):</strong></p>
+<blockquote>
+<p>&quot;Fork this repo. Add embedded analytics to your React app in under 10 minutes.&quot;</p>
+</blockquote>
+<p><strong>NOT:</strong> &quot;Sign up for Sisense&quot; or &quot;Learn Compose SDK&quot;</p>
+<p><strong>Why This Works:</strong></p>
+<ul>
+<li>Developer immediately sees the problem solved (embedded charts in React)</li>
+<li>No signup wall between discovery and trying</li>
+<li>The repo itself is the sales pitch</li>
+</ul>
+<p><strong>Execution:</strong></p>
+<ul>
+<li>GitHub README (clear, no jargon)</li>
+<li>Live demo link (one click)</li>
+<li>Social proof: &quot;200 developers forked this&quot; (once it gains traction)</li>
+</ul>
+<hr />
+<h3 id="step-2-aha-moment-5-minutes-zero-friction">Step 2: Aha Moment (&lt;5 minutes, Zero Friction)</h3>
+<p><strong>What Must Happen:</strong>
+Developer reaches: <strong>&quot;This actually works in my stack.&quot;</strong></p>
+<p><strong>How:</strong></p>
+<ol>
+<li><p><strong>StackBlitz / CodeSandbox Embed</strong> (in README)</p>
+<ul>
+<li>Developer sees live chart rendering in browser</li>
+<li>No account required</li>
+<li>Click → see working dashboard</li>
+</ul>
+</li>
+<li><p><strong>Local Run is Instant</strong></p>
+</li>
+</ol>
+<pre><code class="language-bash">   git clone &lt;repo&gt;
+   npm install &amp;&amp; npm run dev
+   # 2 minutes later: dashboard is live
+</code></pre>
+<ol start="3">
+<li><p><strong>No Sisense Config Needed Yet</strong></p>
+<ul>
+<li>Local mode works with zero setup</li>
+<li>Sisense is optional (but shown as upgrade path)</li>
+</ul>
+</li>
+</ol>
+<p><strong>Success Metric:</strong> &quot;I could ship this in my product&quot; thought</p>
+<hr />
+<h3 id="step-3-activation-npm-install-real-signup">Step 3: Activation (npm install = Real Signup)</h3>
+<p><strong>The Key CTA:</strong></p>
+<pre><code class="language-bash">npm install @sisense/sdk-ui
+</code></pre>
+<p><strong>Why This Matters:</strong></p>
+<ul>
+<li>This is the <strong>real activation moment</strong></li>
+<li>Developer has self-selected as active evaluator</li>
+<li>Track this: <code>npm install</code> events (not form fills)</li>
+</ul>
+<p><strong>Follow-Up Path:</strong></p>
+<ol>
+<li>&quot;Now add real data&quot;</li>
+</ol>
+<pre><code class="language-bash">   VITE_SISENSE_URL=your-instance
+   VITE_SISENSE_TOKEN=your-token
+   # Restart
+   npm run dev
+</code></pre>
+<ol start="2">
+<li>Same UI, real Sisense backend</li>
+<li>Multi-tenancy works out-of-the-box</li>
+<li>Deploy to production when ready</li>
+</ol>
+<p><strong>Conversion Metric:</strong> Trial signup + Compose SDK installation</p>
+<hr />
+<h3 id="step-4-habit-loop-community">Step 4: Habit Loop (Community)</h3>
+<p><strong>How to Keep Them Engaged:</strong></p>
+<ul>
+<li>GitHub Discussions on Compose SDK repo (technical Q&amp;A)</li>
+<li>&quot;Built with Compose SDK&quot; showcase (let devs self-submit)</li>
+<li>Weekly changelog with code examples (developers subscribe to repos, not newsletters)</li>
+</ul>
+<p><strong>What NOT to Do:</strong></p>
+<ul>
+<li>Don't send marketing emails</li>
+<li>Don't require webinars</li>
+<li>Don't &quot;nurture&quot; them in a CRM</li>
+</ul>
+<p><strong>What TO Do:</strong></p>
+<ul>
+<li>Answer technical questions (fast)</li>
+<li>Share community builds</li>
+<li>Show off advanced features through real code examples</li>
+</ul>
+<hr />
+<h3 id="step-5-conversion-value-does-the-selling">Step 5: Conversion (Value Does the Selling)</h3>
+<p><strong>When They're Ready to Pay:</strong></p>
+<p>Developer hits a limit that requires Sisense:</p>
+<ul>
+<li>Multi-tenancy at scale (&gt;10 customers)</li>
+<li>White-labeling / white-glove customization</li>
+<li>SSO + advanced security</li>
+<li>AI Assistant features (natural language queries)</li>
+<li>Advanced data governance</li>
+</ul>
+<p><strong>The Story They Tell Their Team:</strong></p>
+<blockquote>
+<p>&quot;I built embedded analytics for our product using Sisense.&quot;</p>
+</blockquote>
+<p><strong>Sisense is the hero? NO.</strong></p>
+<blockquote>
+<p>&quot;I was the hero. Sisense was the tool.&quot;</p>
+</blockquote>
+<p><strong>This matters:</strong> A developer who tells that story internally is Sisense's most effective sales rep. They cost zero dollars.</p>
+<hr />
+<h2 id="the-funnel-in-numbers">The Funnel in Numbers</h2>
+<table>
+<thead>
+<tr>
+  <th>Stage</th>
+  <th>CTA</th>
+  <th>Audience</th>
+  <th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Awareness</strong></td>
+  <td>Fork repo → See it work</td>
+  <td>GitHub trending</td>
+  <td>1,000+ visitors</td>
+</tr>
+<tr>
+  <td><strong>Interest</strong></td>
+  <td>Live demo works</td>
+  <td>HN, Dev.to</td>
+  <td>5,000+ views</td>
+</tr>
+<tr>
+  <td><strong>Aha</strong></td>
+  <td><code>npm run dev</code> in 2 min</td>
+  <td>Anyone who clicks</td>
+  <td>500+ who run it</td>
+</tr>
+<tr>
+  <td><strong>Trial</strong></td>
+  <td><code>npm install @sisense/sdk-ui</code></td>
+  <td>Active builders</td>
+  <td>50-100 installs</td>
+</tr>
+<tr>
+  <td><strong>Conversion</strong></td>
+  <td>Sisense trial + real data</td>
+  <td>Scaling builders</td>
+  <td>25-50 signups</td>
+</tr>
+<tr>
+  <td><strong>Advocacy</strong></td>
+  <td>&quot;I built this with Sisense&quot;</td>
+  <td>Their team/community</td>
+  <td>10+ testimonials</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="why-this-beats-traditional-sales">Why This Beats Traditional Sales</h2>
+<h3 id="traditional-bi-sales">Traditional BI Sales:</h3>
+<pre><code>1. Cold outreach
+2. 30-min demo call
+3. 45-day sales cycle
+4. Budget approval required
+5. Implementation (3-6 months)
+6. Finally shipped
+</code></pre>
+<p><strong>Friction:</strong> High. Decision makers: Executives.</p>
+<h3 id="f1-pit-wall-plg">F1 Pit Wall PLG:</h3>
+<pre><code>1. GitHub trending
+2. Aha moment (2 minutes)
+3. Installation (5 minutes)
+4. Expansion (1-2 weeks)
+</code></pre>
+<p><strong>Friction:</strong> Low. Decision makers: Individual developers.</p>
+<hr />
+<h2 id="positioning">Positioning</h2>
+<h3 id="for-developers">For Developers:</h3>
+<blockquote>
+<p>&quot;Ship embedded analytics in React, no BI platform required.&quot;</p>
+</blockquote>
+<h3 id="for-pmsfounders">For PMs/Founders:</h3>
+<blockquote>
+<p>&quot;Your engineers can add analytics in days. Then scale with Sisense when you need it.&quot;</p>
+</blockquote>
+<h3 id="for-sisense-leadership">For Sisense Leadership:</h3>
+<blockquote>
+<p>&quot;Product-led growth: developers evaluate Compose SDK by building with it, not sitting through demos.&quot;</p>
+</blockquote>
+<hr />
+<h2 id="success-metrics-real-not-vanity">Success Metrics (Real, Not Vanity)</h2>
+<h3 id="month-1">Month 1:</h3>
+<ul>
+<li>✅ 500+ GitHub stars</li>
+<li>✅ 100+ forks</li>
+<li>✅ 5,000+ Dev.to views</li>
+<li>✅ 500+ <code>npm install @sisense/sdk-ui</code></li>
+<li>✅ HN front page (200+ upvotes)</li>
+</ul>
+<h3 id="month-2-3">Month 2-3:</h3>
+<ul>
+<li>✅ 25+ Sisense trial signups (attributed)</li>
+<li>✅ 10+ community extensions/remixes</li>
+<li>✅ 5+ conference talks accepted</li>
+<li>✅ 1,000+ stars (compound growth)</li>
+</ul>
+<h3 id="month-4">Month 4+:</h3>
+<ul>
+<li>✅ First paid customer from repo (ideal case)</li>
+<li>✅ Community becomes self-sustaining</li>
+<li>✅ Repo becomes reference architecture</li>
+</ul>
+<hr />
+<h2 id="timeline-launch-plan">Timeline &amp; Launch Plan</h2>
+<h3 id="week-1-foundation">Week 1: Foundation</h3>
+<ul>
+<li>[ ] GitHub repo goes public (perfect README)</li>
+<li>[ ] Dev.to post published</li>
+<li>[ ] Twitter thread scheduled</li>
+<li>[ ] LinkedIn post ready</li>
+<li>[ ] HackerNews prep (time it for Tuesday morning)</li>
+</ul>
+<h3 id="week-2-launch-day">Week 2: Launch Day</h3>
+<ul>
+<li>[ ] HackerNews submit (morning)</li>
+<li>[ ] Twitter thread goes live</li>
+<li>[ ] LinkedIn post shares</li>
+<li>[ ] Discord/community shares</li>
+<li>[ ] All hands on deck for comments/questions</li>
+</ul>
+<h3 id="week-3-4-ride-the-wave">Week 3-4: Ride the Wave</h3>
+<ul>
+<li>[ ] Monitor GitHub activity (PRs, discussions)</li>
+<li>[ ] Respond to every HN comment</li>
+<li>[ ] YouTube screencast published</li>
+<li>[ ] 2-3 follow-up posts (Deep dives)</li>
+<li>[ ] Sisense internal promotion</li>
+</ul>
+<h3 id="week-5-expansion">Week 5+: Expansion</h3>
+<ul>
+<li>[ ] Feature community remixes on social</li>
+<li>[ ] Invite influencers to fork it</li>
+<li>[ ] Conference talk pitches</li>
+<li>[ ] Developer testimonial collection</li>
+<li>[ ] Next iteration planning</li>
+</ul>
+<hr />
+<h2 id="why-this-works-for-sisense">Why This Works for Sisense</h2>
+<h3 id="1-bottom-up-adoption">1. <strong>Bottom-Up Adoption</strong></h3>
+<p>Developers install SDK themselves. No sales dependency.</p>
+<h3 id="2-proof-of-compose-sdk">2. <strong>Proof of Compose SDK</strong></h3>
+<p>Shows SDK works in modern stacks (React, TypeScript, production-ready).</p>
+<h3 id="3-developer-goodwill">3. <strong>Developer Goodwill</strong></h3>
+<p>&quot;Sisense doesn't lock you in. Sisense enables you.&quot;</p>
+<h3 id="4-competitive-advantage">4. <strong>Competitive Advantage</strong></h3>
+<p>Metabase can't do this. Cube.dev can't do this. Superset can't do this.</p>
+<p>Only Sisense Compose SDK has the right abstraction.</p>
+<h3 id="5-community-asset">5. <strong>Community Asset</strong></h3>
+<p>Forks become case studies. Extensions become testimonials. Network effects.</p>
+<hr />
+<h2 id="risk-mitigation">Risk Mitigation</h2>
+<h3 id="risk-theyll-just-use-local-mode-forever">Risk: &quot;They'll just use local mode forever&quot;</h3>
+<p><strong>Response:</strong> That's fine. Some will. But when they scale (multi-tenancy, white-labeling, AI features), Sisense is the obvious next step. And they've already proven the idea works.</p>
+<h3 id="risk-competitors-will-fork-this">Risk: &quot;Competitors will fork this&quot;</h3>
+<p><strong>Response:</strong> They will. Proves the strategy works. Sisense developers have the Sisense version with native integrations.</p>
+<h3 id="risk-this-is-just-a-demo-not-real-sisense">Risk: &quot;This is just a demo, not real Sisense&quot;</h3>
+<p><strong>Response:</strong> False. Compose SDK is production-grade. This shows it. Everything works end-to-end with real Sisense data.</p>
+<h3 id="risk-sales-wont-like-bottom-up-growth">Risk: &quot;Sales won't like bottom-up growth&quot;</h3>
+<p><strong>Response:</strong> It's 10x more effective than cold email. And Sisense's target is expanding downmarket (from enterprise to mid-market). This is the beachhead.</p>
+<hr />
+<h2 id="the-narrative-why-someone-should-care">The Narrative (Why Someone Should Care)</h2>
+<blockquote>
+<p><strong>The problem:</strong> Every SaaS company needs embedded analytics. But building analytics is hard. BI platforms are enterprise sales monsters. DIY charting libraries are janky.</p>
+<p><strong>The solution:</strong> Sisense Compose SDK is built for this exact use case. But developers don't know it yet.</p>
+<p><strong>The proof:</strong> F1 Pit Wall Insights. A working example that developers can fork, customize, and ship.</p>
+<p><strong>The outcome:</strong> Developers who ship with Sisense become Sisense advocates. Sales gets warm leads instead of cold prospects. Sisense becomes the default for &quot;how to add analytics to your product.&quot;</p>
+</blockquote>
+<hr />
+
+      </main>
+    </div>
+    <p class="footer">Built as a standalone HTML/CSS strategy page. No external libraries required.</p>
+  </div>
+</body>
+</html>
