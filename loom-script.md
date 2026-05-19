@@ -74,4 +74,4 @@ This script is designed for a 3-minute video pitch/walkthrough for the Sisense B
 
 > "The repo is open-source, fully documented, and includes a set of Cursor/Claude builder prompts to let you recreate or extend this exact flow.
 > 
-> Clone the repo, run local mode in minutes, connect your Sisense Trial, and start building. Let's build what matters!"
+> You can play with the live Vercel demo using the link in the README, or clone the repo, connect your Sisense Trial, and start building. Let's build what matters!"

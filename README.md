@@ -1,21 +1,35 @@
-# F1 Pit Wall
+# F1 Pit Wall Insights
 
-F1 Pit Wall is a Sisense Compose SDK starter kit showing how AI-native builders can turn telemetry data into an embedded analytics experience.
-
-## Showcase
+From raw F1 telemetry to a pit-wall decision dashboard builders can run locally and later connect to Sisense.
 
 ![F1 Pit Wall Showcase](docs/screenshots/vibecoders-showcase.png)
 
-## Why this matters
+## What Is This
 
-Vibe coding can generate dashboards fast, but serious analytics needs a reusable, embedded, governed analytics layer.
+F1 Pit Wall is a React + Vite + TypeScript demo built for the Sisense Build and Tell challenge.
 
-## Build and Tell Narrative
+🚀 **[Play with the Live Demo (Vercel)](https://your-project-name.vercel.app)**  
+*(Currently running in fast Local Mode. Sisense Mode can be enabled by configuring a Sisense data model).*
 
-Local dashboard equals fast prototype.
-Compose SDK equals the embedded analytics layer inside a real product.
+It shows a practical builder journey:
+- Local Mode: run instantly with processed data
+- Sisense Mode: switch to a real Compose SDK integration path
 
-## Run the app
+Core message:
+Vibe coding can generate dashboards quickly.
+Sisense Compose SDK turns that dashboard into embedded analytics builders can ship.
+
+## Features
+
+- F1 decision-focused dashboard (VER vs PER comparison)
+- KPI cards: fastest lap, avg gap, stint drop, turning point
+- Lap trend, driver delta, tyre degradation, and insight cards
+- Local fallback with no credentials
+- Sisense Mode boundary with `SisenseContextProvider`
+- Compose SDK proof component: `SisenseLapTimeChart`
+- Graceful warning when Sisense env vars are missing
+
+## Quick Start
 
 ```bash
 cd frontend
@@ -23,20 +37,17 @@ npm install
 npm run dev
 ```
 
-## Analytics Modes
+Open:
+`http://localhost:5173`
 
-Use `.env.local` in `frontend/`.
+## Run Modes
+
+Create `frontend/.env.local`.
 
 ### Local Mode (default)
 
 ```env
 VITE_ANALYTICS_PROVIDER=local
-```
-
-Local mode reads committed processed data from:
-
-```text
-frontend/public/data/processed/
 ```
 
 ### Sisense Mode
@@ -48,27 +59,15 @@ VITE_SISENSE_TOKEN=your-api-token
 VITE_SISENSE_DATASOURCE=F1_Pit_Wall
 ```
 
-Sisense mode behavior:
-- Uses a real `SisenseContextProvider` boundary.
-- Renders a Compose SDK proof component (`SisenseLapTimeChart`).
-- Fails gracefully if env vars are missing.
-- Keeps local fallback data loading so the app still runs.
-
-If config is missing, the app shows:
+If Sisense config is missing, the app stays up and shows:
 `Sisense Mode requires VITE_SISENSE_URL, VITE_SISENSE_TOKEN, and VITE_SISENSE_DATASOURCE. Switch to Local Mode or configure Sisense.`
 
-## Configure Sisense (manual path)
+## Compose SDK Setup
 
-1. Create Sisense Trial.
-2. Upload the processed F1 CSV data (located in `f1_telemetry_laps.csv` in the root).
-   > [!NOTE]  
-   > **Sisense Trial CSV Build Note:**  
-   > During validation, uploading the F1 CSV into the Sisense Trial failed at the CSV build stage with an AWS S3 `AccessDenied` / `PutObject` storage error.  
-   > This appears to be related to the Trial environment’s internal storage/build configuration rather than the CSV schema itself, because the same error reproduced with a minimal test CSV.  
-   > Until the Trial environment is available for live validation, the project can run fully in Local Mode, while the Compose SDK path remains implemented and ready for a generated Sisense data model. The app is intentionally decoupled so Local Mode remains fully functional while Sisense Mode can be enabled once a valid Sisense data model is available.
-3. Create or identify data source name.
-4. Get API token.
-5. Generate data model:
+1. Create Sisense Trial
+2. Upload processed F1 CSVs
+3. Identify data source name
+4. Generate data model file:
 
 ```bash
 npx @sisense/sdk-cli get-data-model \
@@ -78,14 +77,15 @@ npx @sisense/sdk-cli get-data-model \
   --output src/sisense/f1-data-model.ts
 ```
 
-6. Set `.env.local` values and restart `npm run dev`.
+5. Set `.env.local` with Sisense vars and restart
 
-## Where Compose SDK fits
+## Why Builders Care
 
-The local data path exists so builders can clone and run immediately.
-The Sisense path shows how the same experience becomes product-grade embedded analytics.
+- Build fast in local mode without waiting on platform setup
+- Keep architecture ready for embedded analytics from day one
+- Swap from prototype charts to governed analytics with minimal UI churn
 
-## Structure
+## Repo Structure
 
 ```text
 frontend/
