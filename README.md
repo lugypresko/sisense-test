@@ -8,7 +8,7 @@ From raw F1 telemetry to a pit-wall decision dashboard builders can run locally 
 
 F1 Pit Wall is a React + Vite + TypeScript demo built for the Sisense Build and Tell challenge.
 
-🚀 **[Play with the Live Demo (Vercel)](https://your-project-name.vercel.app)**  
+🚀 **[Play with the Live Demo (Vercel)](https://frontend-two-tau-54.vercel.app)**  
 *(Currently running in fast Local Mode. Sisense Mode can be enabled by configuring a Sisense data model).*
 
 It shows a practical builder journey:
